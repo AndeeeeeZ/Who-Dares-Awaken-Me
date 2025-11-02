@@ -8,6 +8,7 @@ public class SoundEffectPlayer : MonoBehaviour
     [SerializeField]
     private float volumeOffset, pitchOffset;
 
+    [SerializeField]
     private AudioSource audioSource;
 
     private float originalVolume;
@@ -16,7 +17,8 @@ public class SoundEffectPlayer : MonoBehaviour
 
     private void Start()
     {
-        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
         {
             Debug.LogWarning("Missing AudioSource component");

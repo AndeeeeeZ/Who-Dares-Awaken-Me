@@ -3,17 +3,21 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using Unity.VisualScripting;
 using UnityEditor.ShaderGraph;
+using TMPro;
 
 public class HandController : MonoBehaviour
 {
     [SerializeField]
     private Image leftHand, rightHand, center, leftHoldBar, rightHoldBoard, rightHoldHammer;
     private InputActions input;
-    private Animator leftHandAnimator, rightHandAnimator;
+    // private Animator leftHandAnimator, rightHandAnimator;
     [SerializeField]
     private LayerMask mask;
     [SerializeField]
     private float raycastDistance;
+
+    [SerializeField]
+    private TextMeshProUGUI promptText;
     private Camera cam;
     private void Awake()
     {
@@ -24,9 +28,6 @@ public class HandController : MonoBehaviour
     {
         cam = Camera.main;
         UpdateVisuals();
-        // leftHandAnimator = leftHand.gameObject.GetComponent<Animator>();
-        // rightHandAnimator = rightHand.gameObject.GetComponent<Animator>();
-        StopHoldingBoardOnWall();
     }
 
     private void Update()
@@ -38,18 +39,39 @@ public class HandController : MonoBehaviour
         {
             if (hitInfo.collider.GetComponent<IInteractable>() != null)
             {
-                if (hitInfo.collider.GetComponent<Item>() == null)
+                promptText.text = hitInfo.collider.GetComponent<IInteractable>().GetPromptMessage();
+                if (hitInfo.collider.GetComponent<Item>() == null
+                    && hitInfo.collider.GetComponent<Wall>() != null)
                 {
                     rightHoldBoard.gameObject.SetActive(false);
                     rightHand.gameObject.SetActive(false);
                     rightHoldHammer.gameObject.SetActive(true);
                 }
-            }
 
+                if (hitInfo.collider.GetComponent<Wall>() != null)
+                {
+                    hitInfo.collider.GetComponent<Wall>().Hold();
+                    center.gameObject.SetActive(true);
+                    DisableTwoHands();
+                }
+                else
+                {
+                    center.gameObject.SetActive(false);
+                    UpdateVisuals();
+                }
+            }
+            else
+            {
+                promptText.text = "";
+                center.gameObject.SetActive(false);
+                UpdateVisuals();
+            }
         }
         else
         {
             rightHoldHammer.gameObject.SetActive(false);
+            center.gameObject.SetActive(false);
+            promptText.text = "";
             UpdateVisuals();
         }
     }
@@ -72,24 +94,24 @@ public class HandController : MonoBehaviour
     private void OnInteract(InputAction.CallbackContext context)
     {
         UpdateVisuals();
-        if (rightHandAnimator != null)
-            rightHandAnimator.Play("Interact");
-        else
-            Debug.LogError("Missing right hand animator");
+        // if (rightHandAnimator != null)
+        //     rightHandAnimator.Play("Interact");
+        // else
+        //     Debug.LogError("Missing right hand animator");
     }
 
     private void OnGrab(InputAction.CallbackContext context)
     {
         UpdateVisuals();
-        if (leftHandAnimator != null)
-            leftHandAnimator.Play("Grab");
-        else
-            Debug.LogError("Missing left hand animator");
+        // if (leftHandAnimator != null)
+        //     leftHandAnimator.Play("Grab");
+        // else
+        //     Debug.LogError("Missing left hand animator");
     }
 
     private void UpdateVisuals()
     {
-        if (GameController.Instance.isHoldingBar)
+        if (GameController.Instance != null && GameController.Instance.isHoldingBar)
         {
             leftHoldBar.gameObject.SetActive(true);
             leftHand.gameObject.SetActive(false);
@@ -105,7 +127,7 @@ public class HandController : MonoBehaviour
             rightHand.gameObject.SetActive(false);
             rightHoldBoard.gameObject.SetActive(false);
         }
-        else if (GameController.Instance.isHoldingBoard)
+        else if (GameController.Instance != null && GameController.Instance.isHoldingBoard)
         {
             rightHoldBoard.gameObject.SetActive(true);
             rightHand.gameObject.SetActive(false);
@@ -114,24 +136,17 @@ public class HandController : MonoBehaviour
         else
         {
             rightHand.gameObject.SetActive(true);
-            rightHoldBoard.gameObject.SetActive(false);
-
             rightHoldHammer.gameObject.SetActive(false);
+            rightHoldBoard.gameObject.SetActive(false);
         }
     }
 
-    public void HoldBoardOnWall()
+    private void DisableTwoHands()
     {
         leftHand.gameObject.SetActive(false);
+        leftHoldBar.gameObject.SetActive(false);
         rightHand.gameObject.SetActive(false);
-        center.gameObject.SetActive(true);
-    }
-
-    public void StopHoldingBoardOnWall()
-    {
-        UpdateVisuals();
-        leftHand.gameObject.SetActive(true);
-        rightHand.gameObject.SetActive(true);
-        center.gameObject.SetActive(false);
+        rightHoldHammer.gameObject.SetActive(false);
+        rightHoldHammer.gameObject.SetActive(false);
     }
 }

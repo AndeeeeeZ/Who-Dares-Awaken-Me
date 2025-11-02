@@ -9,12 +9,6 @@ public class Wall : HasDurability, IInteractable
     private ItemTypes requiredItemType;
 
     [SerializeField]
-    private float[] statePercentage;
-
-    [SerializeField]
-    private Mesh[] modelMeshes;
-
-    [SerializeField]
     private GameObject fixBoard;
 
     [SerializeField]
@@ -36,7 +30,7 @@ public class Wall : HasDurability, IInteractable
         fixBoard.SetActive(false);
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         if (isBroken)
         {
@@ -50,19 +44,27 @@ public class Wall : HasDurability, IInteractable
                 }
             }
         }
+        isHolding = false; 
     }
     public void Interact()
     {
         if (isBroken)
         {
-            if (GameController.Instance.isHoldingBoard)
+            if (GameController.Instance.isHoldingBoard && !boardPlaced)
             {
                 fixBoard.SetActive(true);
+                boardPlaced = true;
+                GameController.Instance.isHoldingBoard = false;
             }
             isHolding = true;
-            
+
             AddCurrentDurability(amountPerClick);
         }
+    }
+    
+    public void Hold()
+    {
+        isHolding = true; 
     }
 
     public string GetPromptMessage()

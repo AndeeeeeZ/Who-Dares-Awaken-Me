@@ -25,6 +25,9 @@ public class ProductionSpot : MonoBehaviour, IInteractable
     [SerializeField]
     private float timePerAutoProduce;
 
+    [SerializeField]
+    private SoundEffectPlayer autoProduceEffectPlayer, clickEffectPlayer; 
+
     private float timer;
     private int currentAmount;
     private bool startProducing;
@@ -33,7 +36,7 @@ public class ProductionSpot : MonoBehaviour, IInteractable
     {
         timer = 0f;
         currentAmount = 0;
-        startProducing = false;
+        startProducing = false; 
     }
 
     public void Interact()
@@ -41,10 +44,12 @@ public class ProductionSpot : MonoBehaviour, IInteractable
         if (clickToBoost)
         {
             AddCurrentAmount(amountPerClick);
+            clickEffectPlayer.PlayOneShot(); 
         }
         if (autoProduce)
         {
             startProducing = true;
+            autoProduceEffectPlayer.Play();    
         }
     }
 
@@ -84,8 +89,10 @@ public class ProductionSpot : MonoBehaviour, IInteractable
 
     private void ProduceItem()
     {
-        GameObject item = Instantiate(itemPrefab, productionLocation.position, Quaternion.identity, transform);
+        GameObject item = Instantiate(itemPrefab, productionLocation.position, Quaternion.identity);
         currentAmount = 0;
-        startProducing = false; 
+        startProducing = false;
+        UpdateProgressBar();
+        autoProduceEffectPlayer.StopPlaying(); 
     }
 }

@@ -25,10 +25,10 @@ public abstract class HasDurability : MonoBehaviour
         currentDurability = startingDurability;
         timer = 0;
 
-        if (!textDisplay)
+        if (!textDisplay && display != null)
             display.gameObject.SetActive(false);
 
-        if (!progressBarDisplay)
+        if (!progressBarDisplay && progressBar != null)
             progressBar.HideProgressBar();
 
         UpdateDurabilityDisplay();
