@@ -9,6 +9,7 @@ public class HandController : MonoBehaviour
 
     private InputActions input;
     private Animator leftHandAnimator, rightHandAnimator;
+    private SpriteRenderer leftSR, rightSR; 
 
     private void Awake()
     {
