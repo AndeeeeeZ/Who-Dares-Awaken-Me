@@ -89,8 +89,7 @@ public class HandController : MonoBehaviour
 
     private void UpdateVisuals()
     {
-        GameController g = GameController.Instance;
-        if (g.isHoldingBar)
+        if (GameController.Instance.isHoldingBar)
         {
             leftHoldBar.gameObject.SetActive(true);
             leftHand.gameObject.SetActive(false);
@@ -106,7 +105,7 @@ public class HandController : MonoBehaviour
             rightHand.gameObject.SetActive(false);
             rightHoldBoard.gameObject.SetActive(false);
         }
-        else if (g.isHoldingBoard)
+        else if (GameController.Instance.isHoldingBoard)
         {
             rightHoldBoard.gameObject.SetActive(true);
             rightHand.gameObject.SetActive(false);
