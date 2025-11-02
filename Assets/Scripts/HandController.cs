@@ -41,7 +41,8 @@ public class HandController : MonoBehaviour
             {
                 promptText.text = hitInfo.collider.GetComponent<IInteractable>().GetPromptMessage();
                 if (hitInfo.collider.GetComponent<Item>() == null
-                    && hitInfo.collider.GetComponent<Wall>() != null)
+                    && hitInfo.collider.GetComponent<Wall>() == null
+                    && hitInfo.collider.GetComponent<Door>() == null)
                 {
                     rightHoldBoard.gameObject.SetActive(false);
                     rightHand.gameObject.SetActive(false);

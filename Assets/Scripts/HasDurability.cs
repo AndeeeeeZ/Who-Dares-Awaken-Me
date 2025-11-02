@@ -65,7 +65,8 @@ public abstract class HasDurability : MonoBehaviour
 
     protected void GetUpToFullDurability()
     {
-        currentDurability = maxDurability; 
+        currentDurability = maxDurability;
+        UpdateDurabilityDisplay(); 
     }
 
     protected float GetCurrentDurabilityPercentage()

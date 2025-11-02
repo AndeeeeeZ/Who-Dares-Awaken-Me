@@ -52,6 +52,11 @@ public class Tombstone : HasDurability, IInteractable
 
     protected override int DurabilityUpdateCheck()
     {
+        if (currentDurability == maxDurability)
+        {
+            durabilityDeclines = false;
+        }
+        
         float currPercentage = GetCurrentDurabilityPercentage();
         // Debug.Log(currentDurability);
         for (int i = 0; i < statePercentage.Length; i++)

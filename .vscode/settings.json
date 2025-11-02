@@ -66,5 +66,8 @@
     "explorer.fileNesting.patterns": {
         "*.sln": "*.csproj"
     },
-    "dotnet.defaultSolution": "Who-Dares-Awaken-Me.slnx"
+    "dotnet.defaultSolution": "Who-Dares-Awaken-Me.slnx",
+    "cSpell.words": [
+        "pushback"
+    ]
 }

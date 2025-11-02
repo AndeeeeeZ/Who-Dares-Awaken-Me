@@ -10,6 +10,8 @@ public class PlayerInteract : MonoBehaviour
     private LayerMask mask;
     [SerializeField]
     private float raycastDistance;
+    [SerializeField]
+    private float pushbackForce;
     private InputActions input;
 
     private void Awake()
@@ -49,8 +51,16 @@ public class PlayerInteract : MonoBehaviour
         {
             if (hitInfo.collider.GetComponent<IInteractable>() != null)
             {
-                Debug.Log(hitInfo.collider.GetComponent<IInteractable>().GetPromptMessage());
                 hitInfo.collider.GetComponent<IInteractable>().Interact();
+
+                if (hitInfo.collider.GetComponent<Enemy>() != null)
+                {
+                    Debug.Log("Going to hit enemy"); 
+                    Vector3 direction = (hitInfo.collider.gameObject.transform.position - transform.position).normalized;
+                    hitInfo.collider.GetComponent<Rigidbody>()?.AddForce(direction * pushbackForce, ForceMode.Impulse);
+                    hitInfo.collider.GetComponent<Rigidbody>()?.AddForce(Vector3.up * pushbackForce * 2f, ForceMode.Impulse);
+                    
+                }
             }
         }
     }

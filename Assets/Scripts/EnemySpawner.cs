@@ -38,13 +38,14 @@ public class EnemySpawner : MonoBehaviour
 
     public void SpawnEnemy()
     {
+        currentEnemyCount++;
         int i = Random.Range(0, spawnPoints.Length);
         Transform spawnPoint = spawnPoints[i];
         GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, Quaternion.identity, transform);
-        enemy.GetComponent<Enemy>().SetSpawner(this);
         enemy.GetComponent<Enemy>().FindTarget(target);
-        currentEnemyCount++;
+        enemy.GetComponent<Enemy>().SetSpawner(this);
     }
 
-
+    public void CloneDestroyed()
+    { currentEnemyCount--; }
 }

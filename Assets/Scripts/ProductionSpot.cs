@@ -93,6 +93,7 @@ public class ProductionSpot : MonoBehaviour, IInteractable
         currentAmount = 0;
         startProducing = false;
         UpdateProgressBar();
-        autoProduceEffectPlayer.StopPlaying(); 
+        if (autoProduce)
+            autoProduceEffectPlayer.StopPlaying(); 
     }
 }

@@ -21,7 +21,7 @@ public class Wall : HasDurability, IInteractable
     private int amountFixedPerInterval, amountPerClick;
 
     private float timer;
-    private bool isHolding, boardPlaced; 
+    public bool isHolding, boardPlaced; 
     private void Start()
     {
         base.OnStart();
