@@ -55,11 +55,17 @@ public abstract class HasDurability : MonoBehaviour
         currentDurability += amount;
         currentDurability = Mathf.Clamp(currentDurability, 0, maxDurability);
         UpdateDurabilityDisplay();
+        DurabilityUpdateCheck();
     }
 
     public int GetCurrentDurability()
     {
         return currentDurability;
+    }
+
+    protected void GetUpToFullDurability()
+    {
+        currentDurability = maxDurability; 
     }
 
     protected float GetCurrentDurabilityPercentage()
