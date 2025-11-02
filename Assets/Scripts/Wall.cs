@@ -18,7 +18,7 @@ public class Wall : HasDurability, IInteractable
     private GameObject fixBoard;
 
     [SerializeField]
-    private bool isHolding, isBroken;
+    private bool isBroken;
 
     [SerializeField]
     private float fixInterval;
@@ -27,10 +27,12 @@ public class Wall : HasDurability, IInteractable
     private int amountFixedPerInterval, amountPerClick;
 
     private float timer;
+    private bool isHolding, boardPlaced; 
     private void Start()
     {
         base.OnStart();
         isHolding = false;
+        boardPlaced = false; 
         fixBoard.SetActive(false);
     }
 
@@ -53,8 +55,12 @@ public class Wall : HasDurability, IInteractable
     {
         if (isBroken)
         {
+            if (GameController.Instance.isHoldingBoard)
+            {
+                fixBoard.SetActive(true);
+            }
             isHolding = true;
-            fixBoard.SetActive(true);
+            
             AddCurrentDurability(amountPerClick);
         }
     }
