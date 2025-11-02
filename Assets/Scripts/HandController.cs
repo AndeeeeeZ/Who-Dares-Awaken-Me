@@ -1,13 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using Unity.VisualScripting;
+using UnityEditor.ShaderGraph;
 
 public class HandController : MonoBehaviour
 {
     [SerializeField]
-    private Image leftHand, rightHand, center;
-    [SerializeField]
-    private Sprite leftIdle, rightIdle, leftHoldBar, rightHoldBoard, rightHoldHammer, bothHold;
+    private Image leftHand, rightHand, center, leftHoldBar, rightHoldBoard, rightHoldHammer;
     private InputActions input;
     private Animator leftHandAnimator, rightHandAnimator;
     [SerializeField]
@@ -23,8 +23,9 @@ public class HandController : MonoBehaviour
     private void Start()
     {
         cam = Camera.main;
-        leftHandAnimator = leftHand.gameObject.GetComponent<Animator>();
-        rightHandAnimator = rightHand.gameObject.GetComponent<Animator>();
+        UpdateVisuals();
+        // leftHandAnimator = leftHand.gameObject.GetComponent<Animator>();
+        // rightHandAnimator = rightHand.gameObject.GetComponent<Animator>();
         StopHoldingBoardOnWall();
     }
 
@@ -37,8 +38,19 @@ public class HandController : MonoBehaviour
         {
             if (hitInfo.collider.GetComponent<IInteractable>() != null)
             {
-                
+                if (hitInfo.collider.GetComponent<Item>() == null)
+                {
+                    rightHoldBoard.gameObject.SetActive(false);
+                    rightHand.gameObject.SetActive(false);
+                    rightHoldHammer.gameObject.SetActive(true);
+                }
             }
+
+        }
+        else
+        {
+            rightHoldHammer.gameObject.SetActive(false);
+            UpdateVisuals();
         }
     }
 
@@ -79,14 +91,34 @@ public class HandController : MonoBehaviour
     {
         GameController g = GameController.Instance;
         if (g.isHoldingBar)
-            leftHand.sprite = leftHoldBar;
-        else 
-            leftHand.sprite = leftIdle;
+        {
+            leftHoldBar.gameObject.SetActive(true);
+            leftHand.gameObject.SetActive(false);
+        }
+        else
+        {
+            leftHoldBar.gameObject.SetActive(false);
+            leftHand.gameObject.SetActive(true);
+        }
 
-        if (g.isHoldingBoard)
-            rightHand.sprite = rightHoldBoard;
-        else if (rightHand.sprite != rightHoldHammer)
-            rightHand.sprite = rightIdle;
+        if (rightHoldHammer.IsActive())
+        {
+            rightHand.gameObject.SetActive(false);
+            rightHoldBoard.gameObject.SetActive(false);
+        }
+        else if (g.isHoldingBoard)
+        {
+            rightHoldBoard.gameObject.SetActive(true);
+            rightHand.gameObject.SetActive(false);
+            rightHoldHammer.gameObject.SetActive(false);
+        }
+        else
+        {
+            rightHand.gameObject.SetActive(true);
+            rightHoldBoard.gameObject.SetActive(false);
+
+            rightHoldHammer.gameObject.SetActive(false);
+        }
     }
 
     public void HoldBoardOnWall()
