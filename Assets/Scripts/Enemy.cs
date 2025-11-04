@@ -19,7 +19,7 @@ public class Enemy : MonoBehaviour, IInteractable
     [SerializeField]
     private bool haveDeathAnimation, haveExplosionEffect;
 
-    private bool dead; 
+    private bool dead;
 
 
     private void Awake()
@@ -34,9 +34,10 @@ public class Enemy : MonoBehaviour, IInteractable
         currentHealth--;
         if (currentHealth <= 0)
         {
-            spawner.CloneDestroyed();
+
             if (!dead)
             {
+                spawner.CloneDestroyed();
                 dead = true;
                 if (haveDeathAnimation)
                 {
@@ -64,6 +65,7 @@ public class Enemy : MonoBehaviour, IInteractable
             }
             if (!dead)
             {
+                spawner.CloneDestroyed();
                 other.GetComponent<HasDurability>().AddCurrentDurability(damageToDurability);
                 dead = true;
                 if (haveExplosionEffect)

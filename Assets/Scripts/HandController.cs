@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
-using Unity.VisualScripting;
-using UnityEditor.ShaderGraph;
 using TMPro;
 
 public class HandController : MonoBehaviour

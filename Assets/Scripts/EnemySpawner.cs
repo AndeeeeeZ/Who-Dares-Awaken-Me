@@ -25,6 +25,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log(currentEnemyCount); 
         if (currentEnemyCount < maxEnemyCount)
         {
             timer += Time.deltaTime;
