@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 7866864138132444937}
   - component: {fileID: 4442661056368350355}
   - component: {fileID: 2525285328126025759}
-  - component: {fileID: -140268555221829081}
+  - component: {fileID: -4778141446683688721}
   m_Layer: 6
-  m_Name: Small
+  m_Name: Small Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +30,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1100677545328475132}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.7, y: 1.42, z: 4.83}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -47,7 +47,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1100677545328475132}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.12
+  m_Radius: 0.9
   m_Speed: 6
   m_Acceleration: 8
   avoidancePriority: 50
@@ -93,8 +93,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.8389626, y: 1.9842184, z: 0.6494417}
-  m_Center: {x: -0.0023498535, y: 1.1910216, z: 0.025978088}
+  m_Size: {x: 1.8389626, y: 1.9842184, z: 1.8150189}
+  m_Center: {x: -0.0023498535, y: 1.1910216, z: 0.0005925894}
 --- !u!114 &4442661056368350355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,9 +129,10 @@ MonoBehaviour:
   maxHealth: 1
   damageToDurability: -30
   animator: {fileID: 2826174758257828748}
+  waitTimeBeforeDestroy: 0.6
   haveDeathAnimation: 1
   haveExplosionEffect: 1
---- !u!54 &-140268555221829081
+--- !u!54 &-4778141446683688721
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -154,10 +155,10 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 1
+  m_CollisionDetection: 0
 --- !u!1 &6509533011440369309
 GameObject:
   m_ObjectHideFlags: 0
@@ -235,8 +236,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1382255637
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 7bd5ddb47cd650e49a214d5251bcef46, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

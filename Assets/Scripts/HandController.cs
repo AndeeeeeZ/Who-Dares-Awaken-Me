@@ -28,53 +28,114 @@ public class HandController : MonoBehaviour
         UpdateVisuals();
     }
 
+    // private void Update()
+    // {
+    //     Ray ray = new Ray(cam.transform.position, cam.transform.forward);
+    //     // Debug.DrawRay(ray.origin, ray.direction * raycastDistance);
+    //     RaycastHit hitInfo;
+    //     if (Physics.Raycast(ray, out hitInfo, raycastDistance, mask))
+    //     {
+    //         if (hitInfo.collider.GetComponent<IInteractable>() != null)
+    //         {
+    //             promptText.text = hitInfo.collider.GetComponent<IInteractable>().GetPromptMessage();
+    //             if (hitInfo.collider.GetComponent<Item>() == null
+    //                 && hitInfo.collider.GetComponent<Wall>() == null
+    //                 && hitInfo.collider.GetComponent<Door>() == null)
+    //             {
+    //                 rightHoldBoard.gameObject.SetActive(false);
+    //                 rightHand.gameObject.SetActive(false);
+    //                 rightHoldHammer.gameObject.SetActive(true);
+    //             }
+
+    //             if (hitInfo.collider.GetComponent<Wall>() != null)
+    //             {
+    //                 hitInfo.collider.GetComponent<Wall>().Hold();
+    //                 center.gameObject.SetActive(true);
+    //                 DisableTwoHands();
+    //             }
+    //             else
+    //             {
+    //                 center.gameObject.SetActive(false);
+    //                 UpdateVisuals();
+    //             }
+    //         }
+    //         else
+    //         {
+    //             promptText.text = "";
+    //             center.gameObject.SetActive(false);
+    //             UpdateVisuals();
+    //         }
+    //     }
+    //     else
+    //     {
+    //         rightHoldHammer.gameObject.SetActive(false);
+    //         center.gameObject.SetActive(false);
+    //         promptText.text = "";
+    //         UpdateVisuals();
+    //     }
+    // }
+
     private void Update()
     {
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
-        // Debug.DrawRay(ray.origin, ray.direction * raycastDistance);
         RaycastHit hitInfo;
+
+        bool hitInteractable = false;
+        bool hitWall = false;
+        bool hitEnemy = false;
+
         if (Physics.Raycast(ray, out hitInfo, raycastDistance, mask))
         {
-            if (hitInfo.collider.GetComponent<IInteractable>() != null)
-            {
-                promptText.text = hitInfo.collider.GetComponent<IInteractable>().GetPromptMessage();
-                if (hitInfo.collider.GetComponent<Item>() == null
-                    && hitInfo.collider.GetComponent<Wall>() == null
-                    && hitInfo.collider.GetComponent<Door>() == null)
-                {
-                    rightHoldBoard.gameObject.SetActive(false);
-                    rightHand.gameObject.SetActive(false);
-                    rightHoldHammer.gameObject.SetActive(true);
-                }
+            IInteractable interactable = hitInfo.collider.GetComponent<IInteractable>();
 
-                if (hitInfo.collider.GetComponent<Wall>() != null)
+            if (interactable != null)
+            {
+                hitInteractable = true;
+
+                // Check what type of object we hit
+                hitWall = hitInfo.collider.GetComponent<Wall>() != null;
+                hitEnemy = hitInfo.collider.GetComponent<Enemy>() != null;
+                bool hitItem = hitInfo.collider.GetComponent<Item>() != null;
+                bool hitDoor = hitInfo.collider.GetComponent<Door>() != null;
+
+                // Handle Wall specific logic
+                if (hitWall)
                 {
                     hitInfo.collider.GetComponent<Wall>().Hold();
                     center.gameObject.SetActive(true);
                     DisableTwoHands();
+                    return; // Exit early for walls
                 }
-                else
+
+                // Handle Enemy/other interactables
+                if (hitEnemy && !hitItem && !hitDoor)
                 {
-                    center.gameObject.SetActive(false);
-                    UpdateVisuals();
+                    rightHoldBoard.gameObject.SetActive(false);
+                    rightHand.gameObject.SetActive(false);
+                    rightHoldHammer.gameObject.SetActive(true);
+                    return; // Exit early to prevent UpdateVisuals from overriding
                 }
-            }
-            else
-            {
-                promptText.text = "";
-                center.gameObject.SetActive(false);
-                UpdateVisuals();
             }
         }
-        else
+
+        // Reset state when not hitting anything special
+        if (!hitInteractable)
+        {
+            promptText.text = "";
+        }
+
+        if (!hitWall)
+        {
+            center.gameObject.SetActive(false);
+        }
+
+        if (!hitEnemy)
         {
             rightHoldHammer.gameObject.SetActive(false);
-            center.gameObject.SetActive(false);
-            promptText.text = "";
-            UpdateVisuals();
         }
-    }
 
+        UpdateVisuals();
+    }
     private void OnEnable()
     {
         input.Enable();

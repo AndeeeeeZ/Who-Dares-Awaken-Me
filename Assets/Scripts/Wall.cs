@@ -20,7 +20,7 @@ public class Wall : HasDurability, IInteractable
     [SerializeField]
     private int amountFixedPerInterval, amountPerClick;
 
-    private float timer;
+    private float wallTimer;
     public bool isHolding, boardPlaced; 
     private void Start()
     {
@@ -36,10 +36,10 @@ public class Wall : HasDurability, IInteractable
         {
             if (isHolding)
             {
-                timer += Time.deltaTime;
-                if (timer > fixInterval)
+                wallTimer += Time.deltaTime;
+                if (wallTimer > fixInterval)
                 {
-                    timer -= fixInterval;
+                    wallTimer -= fixInterval;
                     AddCurrentDurability(amountFixedPerInterval);
                 }
             }

@@ -22,7 +22,8 @@ public class EnemyPathfinding : MonoBehaviour
         timer += Time.deltaTime;
         if (timer >= intervalPerCheckTarget)
         {
-            agent.SetDestination(target.transform.position);
+            if (agent.enabled)
+                agent.SetDestination(target.transform.position);
             timer %= intervalPerCheckTarget; 
         }
     }
