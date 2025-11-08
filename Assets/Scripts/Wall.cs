@@ -21,54 +21,57 @@ public class Wall : HasDurability, IInteractable
     private int amountFixedPerInterval, amountPerClick;
 
     private float wallTimer;
-    public bool isHolding, boardPlaced; 
+    public bool isHolding, boardPlaced;
     private void Start()
     {
         base.OnStart();
         isHolding = false;
-        boardPlaced = false; 
+        boardPlaced = false;
         fixBoard.SetActive(false);
     }
 
     private void LateUpdate()
     {
-        if (isBroken)
+        if (isBroken && isHolding && boardPlaced)
         {
-            if (isHolding)
+            wallTimer += Time.deltaTime;
+            if (wallTimer > fixInterval)
             {
-                wallTimer += Time.deltaTime;
-                if (wallTimer > fixInterval)
-                {
-                    wallTimer -= fixInterval;
-                    AddCurrentDurability(amountFixedPerInterval);
-                }
+                wallTimer -= fixInterval;
+                AddCurrentDurability(amountFixedPerInterval);
             }
         }
-        isHolding = false; 
+        isHolding = false;
     }
     public void Interact()
     {
-        if (isBroken)
+        if (isBroken && !boardPlaced && GameController.Instance.isHoldingBoard)
         {
-            if (GameController.Instance.isHoldingBoard && !boardPlaced)
-            {
-                fixBoard.SetActive(true);
-                boardPlaced = true;
-                GameController.Instance.isHoldingBoard = false;
-            }
+            fixBoard.SetActive(true);
+            boardPlaced = true;
+            GameController.Instance.isHoldingBoard = false;
             isHolding = true;
 
             AddCurrentDurability(amountPerClick);
         }
     }
-    
+
     public void Hold()
     {
-        isHolding = true; 
+        isHolding = true;
     }
 
     public string GetPromptMessage()
     {
         return promptMessage;
+    }
+
+    protected override int DurabilityUpdateCheck()
+    {
+        if (currentDurability == maxDurability)
+        {
+            // isBroken = false; 
+        }
+        return 0; 
     }
 }

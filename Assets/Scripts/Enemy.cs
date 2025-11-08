@@ -9,6 +9,9 @@ public class Enemy : MonoBehaviour, IInteractable
     private string promptMessage;
     private EnemySpawner spawner;
     private EnemyPathfinding pathfinding;
+
+    [SerializeField]
+    private SoundEffectPlayer boomEffect, dieEffect; 
     [SerializeField]
     private int maxHealth, damageToDurability;
 
@@ -47,7 +50,7 @@ public class Enemy : MonoBehaviour, IInteractable
                 if (haveDeathAnimation)
                 {
                     animator.Play("Dead");
-                    // Play sound clip
+                    dieEffect.PlayOneShot(); 
                 }
                 Destroy(gameObject, waitTimeBeforeDestroy);
             }
@@ -114,6 +117,7 @@ public class Enemy : MonoBehaviour, IInteractable
             if (!dead)
             {
                 Debug.Log("Enemy exploding!");
+                boomEffect.PlayOneShot(); 
                 spawner.CloneDestroyed();
                 other.GetComponent<HasDurability>().AddCurrentDurability(damageToDurability);
                 dead = true;
