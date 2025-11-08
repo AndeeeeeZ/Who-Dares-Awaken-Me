@@ -1,4 +1,7 @@
+using System;
+using System.Collections;
 using Unity.Collections;
+using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Animations;
@@ -11,7 +14,7 @@ public class Enemy : MonoBehaviour, IInteractable
     private EnemyPathfinding pathfinding;
 
     [SerializeField]
-    private SoundEffectPlayer boomEffect, dieEffect; 
+    private SoundEffectPlayer boomEffect, dieEffect;
     [SerializeField]
     private int maxHealth, damageToDurability;
 
@@ -20,25 +23,57 @@ public class Enemy : MonoBehaviour, IInteractable
     private Animator animator;
 
     [SerializeField]
-    private float waitTimeBeforeDestroy;
+    private float waitTimeBeforeDestroy, colorChangingSpeed;
 
     [SerializeField]
     private bool haveDeathAnimation, haveExplosionEffect;
 
-    private NavMeshAgent agent;
-    private bool dead;
+    [SerializeField]
+    private Color hurtColor;
+    [SerializeField]
+    private SpriteRenderer spriteRenderer;
 
+    [SerializeField]
+    private float pushbackForce, pushUpForce;
+
+    private NavMeshAgent agent;
+    private bool dead, changingBackColor;
+    private Color originalColor;
+    private Rigidbody rb;
 
     private void Awake()
     {
+        rb = GetComponent<Rigidbody>();
         pathfinding = GetComponent<EnemyPathfinding>();
         agent = GetComponent<NavMeshAgent>();
         currentHealth = maxHealth;
         dead = false;
+        changingBackColor = false;
+        originalColor = spriteRenderer.color;
+    }
+
+    private void Update()
+    {
+        if (changingBackColor)
+        {
+            spriteRenderer.color = Color.Lerp(spriteRenderer.color, originalColor, colorChangingSpeed * Time.deltaTime);
+
+            // Check if we're close enough to target (within a small threshold)
+            if (Mathf.Abs(spriteRenderer.color.r - originalColor.r) < 0.01f &&
+                Mathf.Abs(spriteRenderer.color.g - originalColor.g) < 0.01f &&
+                Mathf.Abs(spriteRenderer.color.b - originalColor.b) < 0.01f &&
+                Mathf.Abs(spriteRenderer.color.a - originalColor.a) < 0.01f)
+            {
+                spriteRenderer.color = originalColor; // Snap to exact target
+                changingBackColor = false;
+            }
+        }
     }
 
     public void Interact()
     {
+        spriteRenderer.color = hurtColor;
+        changingBackColor = true;
         currentHealth--;
         if (currentHealth <= 0)
         {
@@ -50,8 +85,13 @@ public class Enemy : MonoBehaviour, IInteractable
                 if (haveDeathAnimation)
                 {
                     animator.Play("Dead");
-                    dieEffect.PlayOneShot(); 
                 }
+                else
+                {
+                    animator.StopPlayback();
+                }
+                if (dieEffect != null)
+                    dieEffect.PlayOneShot();
                 Destroy(gameObject, waitTimeBeforeDestroy);
             }
         }
@@ -84,11 +124,26 @@ public class Enemy : MonoBehaviour, IInteractable
     //     }
     // }
 
+    public void HitBack(Vector3 sourcePosition)
+    {
+        agent.enabled = false;
+        rb.isKinematic = false;
+        Vector3 direction = (transform.position - sourcePosition).normalized;
+        rb.AddForce(direction * pushbackForce, ForceMode.Impulse);
+        rb.AddForce(Vector3.up * pushUpForce, ForceMode.Impulse);
+    }
+
     private void OnTriggerEnter(Collider otherC)
     {
         Debug.Log($"OnTriggerEnter called with: {otherC.gameObject.name}");
 
         GameObject other = otherC.gameObject;
+
+        if (otherC.gameObject.CompareTag("Floor"))
+        {
+            agent.enabled = true;
+            rb.isKinematic = true;
+        }
 
         if (other.GetComponent<HasDurability>() != null)
         {
@@ -117,7 +172,7 @@ public class Enemy : MonoBehaviour, IInteractable
             if (!dead)
             {
                 Debug.Log("Enemy exploding!");
-                boomEffect.PlayOneShot(); 
+                boomEffect.PlayOneShot();
                 spawner.CloneDestroyed();
                 other.GetComponent<HasDurability>().AddCurrentDurability(damageToDurability);
                 dead = true;

@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 7472913884569107193}
   - component: {fileID: 3881618506100057439}
   - component: {fileID: 9091603577625015494}
+  - component: {fileID: -5131370520411995133}
+  - component: {fileID: 6566876618748218130}
   m_Layer: 6
   m_Name: Leg Enemy
   m_TagString: Untagged
@@ -48,8 +50,8 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 2.05
-  m_Speed: 10
-  m_Acceleration: 10
+  m_Speed: 20
+  m_Acceleration: 15
   avoidancePriority: 50
   m_AngularSpeed: 200
   m_StoppingDistance: 5
@@ -118,7 +120,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
@@ -153,11 +155,132 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   promptMessage: HIT HIT HIT
-  maxHealth: 3
+  boomEffect: {fileID: 0}
+  dieEffect: {fileID: -5131370520411995133}
+  maxHealth: 4
   damageToDurability: 50
-  animator: {fileID: 0}
+  animator: {fileID: 1228880356643179362}
+  waitTimeBeforeDestroy: 0.4
+  colorChangingSpeed: 2
   haveDeathAnimation: 0
   haveExplosionEffect: 0
+  hurtColor: {r: 1, g: 0, b: 0, a: 1}
+  spriteRenderer: {fileID: 4281802596559614447}
+  pushbackForce: 10
+  pushUpForce: 20
+--- !u!114 &-5131370520411995133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302582205297103264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 766e0acbf5a8b3646a1c8a8e4efaf0a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundEffectPlayer
+  audioClip: {fileID: 8300000, guid: 6177a420f96bc7649af6102c2257067e, type: 3}
+  volumeOffset: 0.1
+  pitchOffset: 0.1
+  audioSource: {fileID: 6566876618748218130}
+--- !u!82 &6566876618748218130
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302582205297103264}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 0.8
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1450286822222408744
 GameObject:
   m_ObjectHideFlags: 0
