@@ -1,11 +1,5 @@
-using System;
-using System.Collections;
-using Unity.Collections;
-using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Animations;
-
 public class Enemy : MonoBehaviour, IInteractable
 {
     [SerializeField]
@@ -15,6 +9,7 @@ public class Enemy : MonoBehaviour, IInteractable
 
     [SerializeField]
     private SoundEffectPlayer boomEffect, dieEffect;
+
     [SerializeField]
     private int maxHealth, damageToDurability;
 

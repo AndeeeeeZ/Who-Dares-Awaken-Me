@@ -166,8 +166,8 @@ MonoBehaviour:
   haveExplosionEffect: 0
   hurtColor: {r: 1, g: 0, b: 0, a: 1}
   spriteRenderer: {fileID: 4281802596559614447}
-  pushbackForce: 10
-  pushUpForce: 20
+  pushbackForce: 15
+  pushUpForce: 5
 --- !u!114 &-5131370520411995133
 MonoBehaviour:
   m_ObjectHideFlags: 0
