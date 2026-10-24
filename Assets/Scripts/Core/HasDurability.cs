@@ -7,7 +7,7 @@ public abstract class HasDurability : MonoBehaviour
     private bool textDisplay, progressBarDisplay;
 
     [SerializeField, Min(0)]
-    protected int maxDurability, currentDurability, startingDurability, durabilityDecliningRate;
+    protected int maxDurability, currentDurability, durabilityDecliningRate;
 
     [SerializeField]
     protected float durabilityDeclinePeriod;
@@ -20,9 +20,11 @@ public abstract class HasDurability : MonoBehaviour
     protected ProgressBar progressBar; 
 
     private float timer;
+    public int MaxDurability => maxDurability;
+
     protected void OnStart()
     {
-        currentDurability = startingDurability;
+        currentDurability = Mathf.Clamp(currentDurability, 0, maxDurability);
         timer = 0;
 
         if (!textDisplay && display != null)

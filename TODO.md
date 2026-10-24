@@ -9,6 +9,8 @@ This checklist turns the plan in `agent.md` into implementation work. The game h
 - [x] **[Code]** Stop passive tombstone durability loss. `Tombstone.Start` now disables the serialized decay setting without changing the prefab.
 - [x] **[Code]** Make the tombstone progress ring change from red at zero health to green at full health and face the main camera.
 - [x] **[Code]** Track the number of tombstones above zero durability and expose a change event and `tombstones: current/total` display script.
+- [x] **[Code]** Randomize starting tombstone durability from GameController: a configurable number start at zero and the rest use an Inspector-configurable range.
+- [ ] **[Unity]** Tune GameController's Starting Broken Tombstones, Minimum Starting Durability, and Maximum Starting Durability fields in the Inspector; confirm all eight Tombstone references remain assigned.
 - [ ] **[Code]** Make repair meaningful within 30 seconds. Current repair is 2 health per click; choose a faster amount or a short hold-to-repair action.
 - [ ] **[Code]** Give each tombstone a clear broken state at zero health. Allow repair from zero while at least one tombstone remains unbroken.
 - [ ] **[Code]** Trigger defeat immediately when all eight tombstones are at zero; stop spawning and player interactions after the result.

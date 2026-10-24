@@ -27198,7 +27198,6 @@ MonoBehaviour:
   progressBarDisplay: 1
   maxDurability: 100
   currentDurability: 0
-  startingDurability: 0
   durabilityDecliningRate: 0
   durabilityDeclinePeriod: 0
   durabilityDeclines: 0
@@ -34618,7 +34617,6 @@ MonoBehaviour:
   progressBarDisplay: 1
   maxDurability: 50
   currentDurability: 0
-  startingDurability: 0
   durabilityDecliningRate: 0
   durabilityDeclinePeriod: 0
   durabilityDeclines: 0
@@ -34683,7 +34681,7 @@ MonoBehaviour:
   isHoldingBoard: 0
   isHoldingBar: 0
   nextSceneName: 
-  player: {fileID: 0}
+  player: {fileID: 840097489}
   Tombstones:
   - {fileID: 826248807}
   - {fileID: 1592406946}
@@ -34693,6 +34691,9 @@ MonoBehaviour:
   - {fileID: 822459542}
   - {fileID: 735209913}
   - {fileID: 1569536243}
+  startingBrokenTombstones: 5
+  minimumStartingDurability: 25
+  maximumStartingDurability: 75
   Doors:
   - {fileID: 1494045082}
   Walls:

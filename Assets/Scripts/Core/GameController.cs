@@ -12,10 +12,18 @@ public class GameController : MonoBehaviour
     public GameObject player; 
     [SerializeField]
     private Tombstone[] Tombstones;
+    [Header("Tombstone Starting Durability")]
+    [SerializeField, Min(0)]
+    private int startingBrokenTombstones = 2;
+    [SerializeField, Min(1)]
+    private int minimumStartingDurability = 25;
+    [SerializeField, Min(1)]
+    private int maximumStartingDurability = 75;
     public Door[] Doors;
     public Wall[] Walls; 
 
     private readonly List<Tombstone> trackedTombstones = new List<Tombstone>();
+    private bool initializingTombstones;
 
     public int TotalTombstones => trackedTombstones.Count;
     public int StandingTombstones { get; private set; }
@@ -40,6 +48,9 @@ public class GameController : MonoBehaviour
 
         isHoldingBar = false;
         isHoldingBoard = false;
+        initializingTombstones = true;
+        InitializeTombstones();
+        initializingTombstones = false;
         RefreshTombstoneCount();
     }
 
@@ -78,7 +89,42 @@ public class GameController : MonoBehaviour
 
     private void OnTombstoneDurabilityChanged(Tombstone tombstone)
     {
-        RefreshTombstoneCount();
+        if (!initializingTombstones)
+            RefreshTombstoneCount();
+    }
+
+    private void InitializeTombstones()
+    {
+        int total = trackedTombstones.Count;
+        if (total == 0)
+            return;
+
+        int brokenCount = Mathf.Clamp(startingBrokenTombstones, 0, total - 1);
+        int minimum = Mathf.Max(1, Mathf.Min(minimumStartingDurability, maximumStartingDurability));
+        int maximum = Mathf.Max(minimum, Mathf.Max(minimumStartingDurability, maximumStartingDurability));
+
+        List<Tombstone> shuffled = new List<Tombstone>(trackedTombstones);
+        for (int i = shuffled.Count - 1; i > 0; i--)
+        {
+            int swapIndex = UnityEngine.Random.Range(0, i + 1);
+            Tombstone temporary = shuffled[i];
+            shuffled[i] = shuffled[swapIndex];
+            shuffled[swapIndex] = temporary;
+        }
+
+        for (int i = 0; i < shuffled.Count; i++)
+        {
+            Tombstone tombstone = shuffled[i];
+            if (i < brokenCount || tombstone.MaxDurability <= 0)
+            {
+                tombstone.InitializeDurability(0);
+                continue;
+            }
+
+            int lower = Mathf.Min(minimum, tombstone.MaxDurability);
+            int upper = Mathf.Min(maximum, tombstone.MaxDurability);
+            tombstone.InitializeDurability(UnityEngine.Random.Range(lower, upper + 1));
+        }
     }
 
     private void RefreshTombstoneCount()

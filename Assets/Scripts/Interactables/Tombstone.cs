@@ -17,8 +17,6 @@ public class Tombstone : HasDurability, IInteractable
     private Color emptyRingColor = Color.red;
     [SerializeField]
     private Color fullRingColor = Color.green;
-    // [SerializeField]
-    // private Material[] modelMaterials;
 
     [SerializeField]
     private ParticleSystem particle;
@@ -26,15 +24,14 @@ public class Tombstone : HasDurability, IInteractable
     [SerializeField]
     private SoundEffectPlayer soundEffectPlayer; 
     private MeshFilter meshFilter;
-    // private MeshRenderer meshRenderer;
     private int currentModel = -1;
+    private bool isInitialized;
 
     private void Start()
     {
         durabilityDeclines = false;
         base.OnStart(); 
         meshFilter = GetComponent<MeshFilter>();
-        // meshRenderer = GetComponent<MeshRenderer>();
 
         if (progressBar != null)
         {
@@ -44,11 +41,21 @@ public class Tombstone : HasDurability, IInteractable
 
         if (statePercentage.Length != modelMeshes.Length)
         {
-            Debug.LogError("Tombstone has unmatched number of states, meshes, and materials");
+            Debug.LogError("Tombstone has unmatched numbers of state percentages and meshes", this);
         }
-        currentDurability = startingDurability;
-        currentModel = DurabilityUpdateCheck();
+        isInitialized = true;
+        DurabilityUpdateCheck();
         UpdateDurabilityDisplay();
+    }
+
+    public void InitializeDurability(int value)
+    {
+        currentDurability = Mathf.Clamp(value, 0, maxDurability);
+        if (!isInitialized)
+            return;
+
+        UpdateDurabilityDisplay();
+        DurabilityUpdateCheck();
     }
 
     public void Interact()
@@ -65,13 +72,7 @@ public class Tombstone : HasDurability, IInteractable
 
     protected override int DurabilityUpdateCheck()
     {
-        if (currentDurability == maxDurability)
-        {
-            durabilityDeclines = false;
-        }
-        
         float currPercentage = GetCurrentDurabilityPercentage();
-        // Debug.Log(currentDurability);
         int modelIndex = statePercentage.Length - 1;
         for (int i = 0; i < statePercentage.Length; i++)
         {
@@ -92,7 +93,6 @@ public class Tombstone : HasDurability, IInteractable
             return;
 
         meshFilter.mesh = modelMeshes[index];
-        //meshRenderer.material = modelMaterials[index];
 
         currentModel = index;
     }
