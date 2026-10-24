@@ -8,6 +8,7 @@ This checklist turns the plan in `agent.md` into implementation work. The game h
 
 - [x] **[Code]** Stop passive tombstone durability loss. `Tombstone.Start` now disables the serialized decay setting without changing the prefab.
 - [x] **[Code]** Make the tombstone progress ring change from red at zero health to green at full health and face the main camera.
+- [x] **[Code]** Track the number of tombstones above zero durability and expose a change event and `tombstones: current/total` display script.
 - [ ] **[Code]** Make repair meaningful within 30 seconds. Current repair is 2 health per click; choose a faster amount or a short hold-to-repair action.
 - [ ] **[Code]** Give each tombstone a clear broken state at zero health. Allow repair from zero while at least one tombstone remains unbroken.
 - [ ] **[Code]** Trigger defeat immediately when all eight tombstones are at zero; stop spawning and player interactions after the result.
@@ -47,7 +48,8 @@ These are starting values to tune after playing a full run.
 
 - [ ] **[Code]** Feed a minimap with player, enemy, tombstone, and door positions and states.
 - [ ] **[Unity]** Build a readable minimap in the Canvas: player direction, eight tombstones, two doors, and active enemy markers. Color tombstones by health and pulse one under attack.
-- [ ] **[Code]** Expose wave number (1–5), preparation time, enemy count, and surviving tombstone count to the HUD.
+- [ ] **[Code]** Expose wave number (1–5), preparation time, and enemy count to the HUD. Surviving tombstone count is now exposed in code.
+- [ ] **[Unity]** Assign all eight Tombstone components on `GameController`. Add a TextMeshPro UI label under `GameScene`'s `UI Canvas`, attach `TombstoneCountDisplay`, and assign its GameController and Count Text fields.
 - [ ] **[Unity]** Add HUD text/icons and victory/defeat panels. Add directional audio or visual warnings for attacks so the player does not have to watch only the minimap.
 
 ## 5. Polish and validate

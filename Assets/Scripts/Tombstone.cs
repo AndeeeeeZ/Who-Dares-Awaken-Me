@@ -1,7 +1,10 @@
+using System;
 using UnityEngine;
 
 public class Tombstone : HasDurability, IInteractable
 {
+    public event Action<Tombstone> DurabilityChanged;
+
     [SerializeField]
     private string promptMessage;
     [SerializeField]
@@ -51,7 +54,6 @@ public class Tombstone : HasDurability, IInteractable
     public void Interact()
     {
         AddCurrentDurability(fixPerInteraction);
-        DurabilityUpdateCheck();
         particle.Play();
         soundEffectPlayer.PlayOneShot(); 
     }
@@ -70,18 +72,18 @@ public class Tombstone : HasDurability, IInteractable
         
         float currPercentage = GetCurrentDurabilityPercentage();
         // Debug.Log(currentDurability);
+        int modelIndex = statePercentage.Length - 1;
         for (int i = 0; i < statePercentage.Length; i++)
         {
             if (currPercentage >= statePercentage[i])
             {
-                // Debug.Log("Going to switch state to " + i);
-                SwitchModelTo(i);
-                return i;
+                modelIndex = i;
+                break;
             }
         }
-        // Debug.Log("Going to switch state to worst"); 
-        SwitchModelTo(statePercentage.Length - 1);
-        return statePercentage.Length - 1;
+        SwitchModelTo(modelIndex);
+        DurabilityChanged?.Invoke(this);
+        return modelIndex;
     }
 
     private void SwitchModelTo(int index)
