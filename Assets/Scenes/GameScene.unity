@@ -31038,13 +31038,19 @@ MonoBehaviour:
   smallEnemySpawner: {fileID: 429178296}
   legEnemySpawner: {fileID: 250416641}
   playerInteract: {fileID: 840097497}
-  initialPreparationDuration: 0
-  betweenWavePreparationDuration: 0
-  maxSimultaneousEnemies: 6
+  initialPreparationDuration: 15
+  betweenWavePreparationDuration: 10
+  maxSimultaneousEnemies: 8
   titleSceneName: Title
   waves:
-  - smallEnemies: 1
+  - smallEnemies: 2
     legEnemies: 0
+  - smallEnemies: 4
+    legEnemies: 1
+  - smallEnemies: 6
+    legEnemies: 2
+  - smallEnemies: 8
+    legEnemies: 3
 --- !u!4 &1657323097
 Transform:
   m_ObjectHideFlags: 0
