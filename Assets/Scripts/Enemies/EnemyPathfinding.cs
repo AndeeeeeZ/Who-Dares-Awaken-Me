@@ -10,6 +10,7 @@ public class EnemyPathfinding : MonoBehaviour
     private float intervalPerCheckTarget;
     private NavMeshAgent agent;
     private float timer;
+    public HasDurability CurrentTarget => target;
 
     private void Awake()
     {

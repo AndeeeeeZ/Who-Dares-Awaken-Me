@@ -1,15 +1,12 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
     public static GameController Instance { get; private set; }
 
     public bool isHoldingBoard, isHoldingBar;
-    public string nextSceneName;
-    public GameObject player; 
     [SerializeField]
     private Tombstone[] Tombstones;
     [Header("Tombstone Starting Durability")]
@@ -28,6 +25,9 @@ public class GameController : MonoBehaviour
     public int TotalTombstones => trackedTombstones.Count;
     public int StandingTombstones { get; private set; }
     public bool TombstonesInitialized { get; private set; }
+    public IReadOnlyList<Tombstone> TrackedTombstones => trackedTombstones;
+    public IReadOnlyList<Door> ConfiguredDoors => Doors ?? Array.Empty<Door>();
+    public IReadOnlyList<Wall> ConfiguredWalls => Walls ?? Array.Empty<Wall>();
     public event Action<int, int> TombstoneCountChanged;
 
     private void Awake()
@@ -145,11 +145,6 @@ public class GameController : MonoBehaviour
         TombstoneCountChanged?.Invoke(StandingTombstones, TotalTombstones);
     }
 
-    public void ToNextScene()
-    {
-        SceneManager.LoadScene(nextSceneName, LoadSceneMode.Single);
-    }
-    
     public HasDurability GetEnemyTarget()
     {
         HasDurability selected = null;

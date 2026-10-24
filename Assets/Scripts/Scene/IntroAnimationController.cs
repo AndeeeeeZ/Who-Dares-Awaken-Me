@@ -1,4 +1,3 @@
-using System.IO;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Video;
@@ -23,5 +22,11 @@ public class IntroAnimationController : MonoBehaviour
     private void OnVideoEnd(VideoPlayer vp)
     {
         OnVideoPlayerEnd?.Invoke(); 
+    }
+
+    private void OnDestroy()
+    {
+        if (videoPlayer != null)
+            videoPlayer.loopPointReached -= OnVideoEnd;
     }
 }

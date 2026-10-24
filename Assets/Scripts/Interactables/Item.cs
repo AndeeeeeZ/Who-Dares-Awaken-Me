@@ -44,11 +44,6 @@ public class Item : MonoBehaviour, IInteractable
         return promptMessage;
     }
 
-    public ItemTypes GetItemType()
-    {
-        return itemType;
-    }
-
 }
 
 public enum ItemTypes

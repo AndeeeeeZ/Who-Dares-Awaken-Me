@@ -6,9 +6,6 @@ public class Door : HasDurability, IInteractable
     private string promptMessage;
 
     [SerializeField]
-    private ItemTypes requiredItemType;
-
-    [SerializeField]
     private GameObject fixChain;
 
     [SerializeField]

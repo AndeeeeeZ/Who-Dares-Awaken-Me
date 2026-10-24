@@ -67,10 +67,13 @@ public class RoundController : MonoBehaviour
     public float PreparationTimeRemaining { get; private set; }
     public int RemainingEnemies => remainingEnemies;
     public int AliveEnemies => activeEnemies.Count;
+    public IReadOnlyCollection<Enemy> ActiveEnemies => activeEnemies;
 
     public event Action<RoundPhase, int> PhaseChanged;
     public event Action<float> PreparationTimeChanged;
     public event Action<int> RemainingEnemiesChanged;
+    public event Action<Enemy> EnemySpawned;
+    public event Action<Enemy> EnemyRemoved;
 
     private void OnEnable()
     {
@@ -204,6 +207,7 @@ public class RoundController : MonoBehaviour
 
         activeEnemies.Add(enemy);
         enemy.Resolved += OnEnemyResolved;
+        EnemySpawned?.Invoke(enemy);
         return true;
     }
 
@@ -213,6 +217,7 @@ public class RoundController : MonoBehaviour
             return;
 
         enemy.Resolved -= OnEnemyResolved;
+        EnemyRemoved?.Invoke(enemy);
         remainingEnemies--;
         RemainingEnemiesChanged?.Invoke(remainingEnemies);
         if (Phase == RoundPhase.Wave)

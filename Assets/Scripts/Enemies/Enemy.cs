@@ -37,6 +37,7 @@ public class Enemy : MonoBehaviour, IInteractable
     private bool dead, changingBackColor;
     private Color originalColor;
     private Rigidbody rb;
+    public HasDurability CurrentTarget => pathfinding != null ? pathfinding.CurrentTarget : null;
 
     private void Awake()
     {

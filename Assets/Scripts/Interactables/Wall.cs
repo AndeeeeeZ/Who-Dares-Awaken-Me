@@ -6,9 +6,6 @@ public class Wall : HasDurability, IInteractable
     private string promptMessage;
 
     [SerializeField]
-    private ItemTypes requiredItemType;
-
-    [SerializeField]
     private GameObject fixBoard;
 
     [SerializeField]

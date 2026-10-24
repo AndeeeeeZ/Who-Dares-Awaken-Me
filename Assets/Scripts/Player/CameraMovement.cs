@@ -13,6 +13,7 @@ public class CameraMovement : MonoBehaviour
     private Vector3 cameraOffset;
 
     private Transform cameraTransform;
+    private PlayerMovement playerMovement;
     private InputActions input;
     private InputAction lookAction;
     private float xCameraRotation, yCameraRotation;
@@ -28,11 +29,19 @@ public class CameraMovement : MonoBehaviour
         if (!playerTransform)
         {
             Debug.LogError("CameraController missing reference to player");
+            enabled = false;
+            return;
         }
 
         cameraTransform = transform;
+        playerMovement = playerTransform.GetComponent<PlayerMovement>();
+        if (playerMovement == null)
+        {
+            Debug.LogError("CameraMovement needs a PlayerMovement on its assigned player.", this);
+            enabled = false;
+            return;
+        }
         xCameraRotation = 180f;
-        // cameraTransform.eulerAngles = playerTransform.rotation.eulerAngles; 
     }
 
     private void LateUpdate()
@@ -51,7 +60,7 @@ public class CameraMovement : MonoBehaviour
 
         cameraTransform.eulerAngles = new Vector3(xCameraRotation, yCameraRotation, 0f);
 
-        playerTransform.gameObject.GetComponent<PlayerMovement>().RotateBy(yRotationDelta);
+        playerMovement.RotateBy(yRotationDelta);
     }
 
     private void OnEnable()

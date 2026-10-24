@@ -7,14 +7,13 @@ public class PlayerMovement : MonoBehaviour
     private SoundEffectPlayer soundEffectPlayer; 
 
     [SerializeField]
-    private float moveSpeed, rotationSpeed, jumpForce;
+    private float moveSpeed, jumpForce;
 
     [SerializeField, Min(0f)]
     private int maxNumJump;
 
     private Rigidbody rb;
     private InputActions input;
-    private InputAction lookAction;
 
     private float xMovement, zMovement;
     private float pendingRotation;
@@ -23,7 +22,6 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         input = new InputActions();
-        lookAction = input.Player.Look;
     }
 
     private void Start()

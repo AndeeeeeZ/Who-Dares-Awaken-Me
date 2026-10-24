@@ -92,7 +92,7 @@ public class Tombstone : HasDurability, IInteractable
         if (index == currentModel)
             return;
 
-        meshFilter.mesh = modelMeshes[index];
+        meshFilter.sharedMesh = modelMeshes[index];
 
         currentModel = index;
     }
