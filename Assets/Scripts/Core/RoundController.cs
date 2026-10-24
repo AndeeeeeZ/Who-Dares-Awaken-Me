@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
 public class RoundController : MonoBehaviour
@@ -34,12 +35,14 @@ public class RoundController : MonoBehaviour
     [SerializeField] private GameController gameController;
     [SerializeField] private EnemySpawner smallEnemySpawner;
     [SerializeField] private EnemySpawner legEnemySpawner;
+    [SerializeField] private PlayerInteract playerInteract;
 
     [Header("Round Rules")]
     [SerializeField, Min(0f)] private float initialPreparationDuration = 60f;
     [FormerlySerializedAs("preparationDuration")]
     [SerializeField, Min(0f)] private float betweenWavePreparationDuration = 30f;
     [SerializeField, Min(1)] private int maxSimultaneousEnemies = 6;
+    [SerializeField] private string titleSceneName = "Title";
     [SerializeField] private WaveBudget[] waves =
     {
         new WaveBudget(4, 0),
@@ -55,6 +58,8 @@ public class RoundController : MonoBehaviour
     private int remainingEnemies;
     private float smallSpawnTimer;
     private float legSpawnTimer;
+    private float timeScaleBeforeResult;
+    private bool pausedForResult;
 
     public RoundPhase Phase { get; private set; } = RoundPhase.WaitingToStart;
     public int CurrentWave { get; private set; }
@@ -82,11 +87,12 @@ public class RoundController : MonoBehaviour
     private void Start()
     {
         if (gameController == null || smallEnemySpawner == null || legEnemySpawner == null ||
+            playerInteract == null ||
             smallEnemySpawner == legEnemySpawner ||
             waves == null || waves.Length != 5 || maxSimultaneousEnemies < 1 ||
             !smallEnemySpawner.IsConfigured || !legEnemySpawner.IsConfigured)
         {
-            Debug.LogError("RoundController needs a GameController, two configured enemy spawners, and exactly five waves.", this);
+            Debug.LogError("RoundController needs a GameController, PlayerInteract, two configured enemy spawners, and exactly five waves.", this);
             enabled = false;
         }
     }
@@ -101,6 +107,11 @@ public class RoundController : MonoBehaviour
             if (enemy != null)
                 enemy.Resolved -= OnEnemyResolved;
         }
+    }
+
+    private void OnDestroy()
+    {
+        RestoreTimeScale();
     }
 
     private void Update()
@@ -229,7 +240,44 @@ public class RoundController : MonoBehaviour
 
     private void EndRound(RoundPhase result)
     {
+        if (Phase == RoundPhase.Victory || Phase == RoundPhase.Defeat)
+            return;
+
         Phase = result;
+        playerInteract.enabled = false;
+        timeScaleBeforeResult = Time.timeScale;
+        pausedForResult = true;
+        Time.timeScale = 0f;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         PhaseChanged?.Invoke(Phase, CurrentWave);
+    }
+
+    public void RestartGame()
+    {
+        RestoreTimeScale();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
+    }
+
+    public void ReturnToTitle()
+    {
+        if (string.IsNullOrWhiteSpace(titleSceneName) ||
+            !Application.CanStreamedLevelBeLoaded(titleSceneName))
+        {
+            Debug.LogError("RoundController needs a title scene name included in Build Settings.", this);
+            return;
+        }
+
+        RestoreTimeScale();
+        SceneManager.LoadScene(titleSceneName, LoadSceneMode.Single);
+    }
+
+    private void RestoreTimeScale()
+    {
+        if (!pausedForResult)
+            return;
+
+        Time.timeScale = timeScaleBeforeResult;
+        pausedForResult = false;
     }
 }
