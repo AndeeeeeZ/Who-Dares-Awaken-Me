@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class RoundController : MonoBehaviour
 {
@@ -35,7 +36,9 @@ public class RoundController : MonoBehaviour
     [SerializeField] private EnemySpawner legEnemySpawner;
 
     [Header("Round Rules")]
-    [SerializeField, Min(0f)] private float preparationDuration = 30f;
+    [SerializeField, Min(0f)] private float initialPreparationDuration = 60f;
+    [FormerlySerializedAs("preparationDuration")]
+    [SerializeField, Min(0f)] private float betweenWavePreparationDuration = 30f;
     [SerializeField, Min(1)] private int maxSimultaneousEnemies = 6;
     [SerializeField] private WaveBudget[] waves =
     {
@@ -131,7 +134,9 @@ public class RoundController : MonoBehaviour
     private void BeginPreparation()
     {
         CurrentWave++;
-        PreparationTimeRemaining = preparationDuration;
+        PreparationTimeRemaining = CurrentWave == 1
+            ? initialPreparationDuration
+            : betweenWavePreparationDuration;
         Phase = RoundPhase.Preparation;
         PhaseChanged?.Invoke(Phase, CurrentWave);
         PreparationTimeChanged?.Invoke(PreparationTimeRemaining);

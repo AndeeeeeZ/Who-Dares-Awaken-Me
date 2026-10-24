@@ -29887,7 +29887,8 @@ MonoBehaviour:
   gameController: {fileID: 2143591776}
   smallEnemySpawner: {fileID: 429178296}
   legEnemySpawner: {fileID: 250416641}
-  preparationDuration: 30
+  initialPreparationDuration: 20
+  betweenWavePreparationDuration: 10
   maxSimultaneousEnemies: 6
   waves:
   - smallEnemies: 4
