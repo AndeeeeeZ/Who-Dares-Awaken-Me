@@ -36,7 +36,7 @@ public class HandController : MonoBehaviour
         bool holdingBar = gameController.isHoldingBar;
         bool holdingBoard = gameController.isHoldingBoard;
         bool aimingAtWall = target is Wall;
-        bool showTwoHandHold = aimingAtWall && holdingBoard;
+        bool showTwoHandHold = target is Wall wall && wall.boardPlaced;
         bool showHands = !showTwoHandHold;
         bool showHammer = target != null && !aimingAtWall && !(target is Item) && !(target is Door);
 

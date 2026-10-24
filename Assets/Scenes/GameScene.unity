@@ -9603,7 +9603,6 @@ GameObject:
   - component: {fileID: 503862416}
   - component: {fileID: 503862419}
   - component: {fileID: 503862418}
-  - component: {fileID: 503862417}
   m_Layer: 5
   m_Name: Enemy Count
   m_TagString: Untagged
@@ -9630,20 +9629,6 @@ RectTransform:
   m_AnchoredPosition: {x: -305, y: 166}
   m_SizeDelta: {x: 300, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &503862417
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 503862415}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60ba752bede3c3443bfd1c5334c0d01d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TombstoneCountDisplay
-  gameController: {fileID: 2143591776}
-  countText: {fileID: 503862418}
 --- !u!114 &503862418
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10733,7 +10718,6 @@ GameObject:
   - component: {fileID: 635828748}
   - component: {fileID: 635828751}
   - component: {fileID: 635828750}
-  - component: {fileID: 635828749}
   m_Layer: 5
   m_Name: PrepreationTimerText
   m_TagString: Untagged
@@ -10760,20 +10744,6 @@ RectTransform:
   m_AnchoredPosition: {x: -305, y: 166}
   m_SizeDelta: {x: 300, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &635828749
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 635828747}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60ba752bede3c3443bfd1c5334c0d01d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TombstoneCountDisplay
-  gameController: {fileID: 2143591776}
-  countText: {fileID: 635828750}
 --- !u!114 &635828750
 MonoBehaviour:
   m_ObjectHideFlags: 0
