@@ -1,11 +1,13 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 public class Enemy : MonoBehaviour, IInteractable
 {
     [SerializeField]
     private string promptMessage;
-    private EnemySpawner spawner;
     private EnemyPathfinding pathfinding;
+
+    public event Action<Enemy> Resolved;
 
     [SerializeField]
     private SoundEffectPlayer boomEffect, dieEffect;
@@ -67,58 +69,29 @@ public class Enemy : MonoBehaviour, IInteractable
 
     public void Interact()
     {
+        if (dead)
+            return;
+
         spriteRenderer.color = hurtColor;
         changingBackColor = true;
         currentHealth--;
         if (currentHealth <= 0)
         {
             agent.enabled = false;
-            if (!dead)
+            Resolve();
+            if (haveDeathAnimation)
             {
-                spawner.CloneDestroyed();
-                dead = true;
-                if (haveDeathAnimation)
-                {
-                    animator.Play("Dead");
-                }
-                else
-                {
-                    animator.StopPlayback();
-                }
-                if (dieEffect != null)
-                    dieEffect.PlayOneShot();
-                Destroy(gameObject, waitTimeBeforeDestroy);
+                animator.Play("Dead");
             }
+            else
+            {
+                animator.StopPlayback();
+            }
+            if (dieEffect != null)
+                dieEffect.PlayOneShot();
+            Destroy(gameObject, waitTimeBeforeDestroy);
         }
     }
-    // private void OnTriggerEnter(Collider otherC)
-    // {
-    //     GameObject other = otherC.gameObject;
-    //     if (other.GetComponent<HasDurability>() != null)
-    //     {
-    //         Debug.Log("Enemy in contact with tombstone"); 
-    //         if (other.GetComponent<Wall>() != null)
-    //         {
-    //             if (!other.GetComponent<Wall>().boardPlaced)
-    //                 return;
-    //         }
-    //         if (other.GetComponent<Door>() != null)
-    //         {
-    //             if (!other.GetComponent<Door>().locked)
-    //                 return;
-    //         }
-    //         if (!dead)
-    //         {
-    //             spawner.CloneDestroyed();
-    //             other.GetComponent<HasDurability>().AddCurrentDurability(damageToDurability);
-    //             dead = true;
-    //             if (haveExplosionEffect)
-    //                 animator.Play("Explode");
-    //             Destroy(gameObject, waitTimeBeforeDestroy);
-    //         }
-    //     }
-    // }
-
     public void HitBack(Vector3 sourcePosition)
     {
         agent.enabled = false;
@@ -130,6 +103,9 @@ public class Enemy : MonoBehaviour, IInteractable
 
     private void OnTriggerEnter(Collider otherC)
     {
+        if (dead)
+            return;
+
         Debug.Log($"OnTriggerEnter called with: {otherC.gameObject.name}");
 
         GameObject other = otherC.gameObject;
@@ -167,10 +143,10 @@ public class Enemy : MonoBehaviour, IInteractable
             if (!dead)
             {
                 Debug.Log("Enemy exploding!");
-                boomEffect.PlayOneShot();
-                spawner.CloneDestroyed();
+                if (boomEffect != null)
+                    boomEffect.PlayOneShot();
                 other.GetComponent<HasDurability>().AddCurrentDurability(damageToDurability);
-                dead = true;
+                Resolve();
                 if (haveExplosionEffect)
                     animator.Play("Explode");
                 Destroy(gameObject, waitTimeBeforeDestroy);
@@ -194,9 +170,18 @@ public class Enemy : MonoBehaviour, IInteractable
         }
     }
 
-    public void SetSpawner(EnemySpawner s)
+    private void Resolve()
     {
-        spawner = s;
+        if (dead)
+            return;
+
+        dead = true;
+        Resolved?.Invoke(this);
+    }
+
+    private void OnDestroy()
+    {
+        Resolve();
     }
 
     public string GetPromptMessage()

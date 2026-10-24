@@ -2784,7 +2784,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   enemyPrefab: {fileID: 302582205297103264, guid: 919602d334762b447a76a128f39efa94, type: 3}
   target: {fileID: 826248800}
-  maxEnemyCount: 1
   spawnInterval: 1
   spawnPoints:
   - {fileID: 1026171251}
@@ -9102,7 +9101,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   enemyPrefab: {fileID: 1100677545328475132, guid: 30ecd3744d83a7345adb9e0020efdec2, type: 3}
   target: {fileID: 826248800}
-  maxEnemyCount: 5
   spawnInterval: 5
   spawnPoints:
   - {fileID: 759904285}
@@ -29500,6 +29498,66 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5f7dbd80b21547d4b858ab33922e2740, type: 3}
+--- !u!1 &1657323095
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1657323097}
+  - component: {fileID: 1657323096}
+  m_Layer: 0
+  m_Name: RoundController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1657323096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1657323095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f757ff370787c60449effb54d91671f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RoundController
+  gameController: {fileID: 2143591776}
+  smallEnemySpawner: {fileID: 429178296}
+  legEnemySpawner: {fileID: 250416641}
+  preparationDuration: 30
+  maxSimultaneousEnemies: 6
+  waves:
+  - smallEnemies: 4
+    legEnemies: 0
+  - smallEnemies: 5
+    legEnemies: 1
+  - smallEnemies: 7
+    legEnemies: 1
+  - smallEnemies: 8
+    legEnemies: 2
+  - smallEnemies: 10
+    legEnemies: 3
+--- !u!4 &1657323097
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1657323095}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1659801210
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -34834,6 +34892,7 @@ SceneRoots:
   - {fileID: 832575519}
   - {fileID: 281890991}
   - {fileID: 1938898545}
+  - {fileID: 1657323097}
   - {fileID: 2143591777}
   - {fileID: 508287896}
   - {fileID: 429178297}

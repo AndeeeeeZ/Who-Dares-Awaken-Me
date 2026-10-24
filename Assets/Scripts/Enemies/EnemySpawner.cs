@@ -2,51 +2,39 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject enemyPrefab, target;
+    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private GameObject target;
+    [SerializeField, Min(0.01f)] private float spawnInterval = 1f;
+    [SerializeField] private Transform[] spawnPoints;
 
-    [SerializeField]
-    private int maxEnemyCount;
+    public float SpawnInterval => Mathf.Max(0.01f, spawnInterval);
+    public bool IsConfigured => enemyPrefab != null && enemyPrefab.GetComponent<Enemy>() != null &&
+                                target != null && spawnPoints != null && spawnPoints.Length > 0 &&
+                                HasOnlyAssignedSpawnPoints();
 
-    [SerializeField]
-    private float spawnInterval;
-
-    [SerializeField]
-    private Transform[] spawnPoints;
-
-    private int currentEnemyCount;
-    private float timer;
-
-    private void Start()
+    public Enemy SpawnEnemy()
     {
-        currentEnemyCount = 0;
-        timer = 0f;
-    }
-
-    private void Update()
-    {
-        Debug.Log(currentEnemyCount); 
-        if (currentEnemyCount < maxEnemyCount)
+        if (!IsConfigured)
         {
-            timer += Time.deltaTime;
-            if (timer >= spawnInterval)
-            {
-                timer %= spawnInterval;
-                SpawnEnemy();
-            }
+            Debug.LogError("EnemySpawner needs an Enemy prefab, a target, and assigned spawn points.", this);
+            return null;
         }
+
+        Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
+        GameObject instance = Instantiate(enemyPrefab, spawnPoint.position, Quaternion.identity, transform);
+        Enemy enemy = instance.GetComponent<Enemy>();
+        enemy.FindTarget(target);
+        return enemy;
     }
 
-    public void SpawnEnemy()
+    private bool HasOnlyAssignedSpawnPoints()
     {
-        currentEnemyCount++;
-        int i = Random.Range(0, spawnPoints.Length);
-        Transform spawnPoint = spawnPoints[i];
-        GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, Quaternion.identity, transform);
-        enemy.GetComponent<Enemy>().FindTarget(target);
-        enemy.GetComponent<Enemy>().SetSpawner(this);
-    }
+        foreach (Transform spawnPoint in spawnPoints)
+        {
+            if (spawnPoint == null)
+                return false;
+        }
 
-    public void CloneDestroyed()
-    { currentEnemyCount--; }
+        return true;
+    }
 }

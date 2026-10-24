@@ -27,6 +27,7 @@ public class GameController : MonoBehaviour
 
     public int TotalTombstones => trackedTombstones.Count;
     public int StandingTombstones { get; private set; }
+    public bool TombstonesInitialized { get; private set; }
     public event Action<int, int> TombstoneCountChanged;
 
     private void Awake()
@@ -51,6 +52,7 @@ public class GameController : MonoBehaviour
         initializingTombstones = true;
         InitializeTombstones();
         initializingTombstones = false;
+        TombstonesInitialized = true;
         RefreshTombstoneCount();
     }
 
