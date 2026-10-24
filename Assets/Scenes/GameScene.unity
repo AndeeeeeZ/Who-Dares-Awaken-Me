@@ -18379,7 +18379,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Tomestones: 4/8'
+  m_text: 'Tombstones: 4/8'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 76a52d9adbb0d024b8c1850b78a4d858, type: 2}
   m_sharedMaterial: {fileID: 5959734415643236337, guid: 76a52d9adbb0d024b8c1850b78a4d858, type: 2}
