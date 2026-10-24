@@ -120,6 +120,10 @@ public class Enemy : MonoBehaviour, IInteractable
         {
             Debug.Log("Has HasDurability component");
 
+            Tombstone tombstone = other.GetComponent<Tombstone>();
+            if (tombstone != null && tombstone.GetCurrentDurability() <= 0)
+                return;
+
             if (other.GetComponent<Wall>() != null)
             {
                 Debug.Log($"Is Wall, boardPlaced: {other.GetComponent<Wall>().boardPlaced}");
@@ -162,11 +166,11 @@ public class Enemy : MonoBehaviour, IInteractable
         }
     }
 
-    public void FindTarget(GameObject target)
+    public void FindTarget(Tombstone target, GameController gameController)
     {
         if (target != null)
         {
-            pathfinding.SetTarget(target);
+            pathfinding.SetTarget(target, gameController);
         }
     }
 

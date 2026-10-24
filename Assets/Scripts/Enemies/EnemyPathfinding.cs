@@ -1,12 +1,10 @@
-using System.Threading;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class EnemyPathfinding : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject target;
+    private Tombstone target;
+    private GameController gameController;
 
     [SerializeField]
     private float intervalPerCheckTarget;
@@ -22,15 +20,20 @@ public class EnemyPathfinding : MonoBehaviour
         timer += Time.deltaTime;
         if (timer >= intervalPerCheckTarget)
         {
-            if (agent.enabled)
+            if (target == null || target.GetCurrentDurability() <= 0)
+                target = gameController != null ? gameController.GetEnemyTarget() : null;
+
+            if (agent.enabled && target != null)
                 agent.SetDestination(target.transform.position);
             timer %= intervalPerCheckTarget; 
         }
     }
 
-    public void SetTarget(GameObject t)
+    public void SetTarget(Tombstone t, GameController controller)
     {
         target = t;
-        agent.SetDestination(target.transform.position);
+        gameController = controller;
+        if (agent.enabled && target != null)
+            agent.SetDestination(target.transform.position);
     }
 }

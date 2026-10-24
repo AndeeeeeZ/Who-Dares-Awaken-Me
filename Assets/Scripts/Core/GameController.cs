@@ -150,27 +150,20 @@ public class GameController : MonoBehaviour
         SceneManager.LoadScene(nextSceneName, LoadSceneMode.Single);
     }
     
-    public Transform GetEnemyTarget()
+    public Tombstone GetEnemyTarget()
     {
-        List<Transform> possibleLocations = new List<Transform>();
-        if (Doors[0].locked)
-            possibleLocations.Add(Doors[0].transform);
-        if (Walls[0].boardPlaced)
-            possibleLocations.Add(Walls[0].transform); 
-        if (possibleLocations.Count < 2)
+        Tombstone selected = null;
+        int eligibleCount = 0;
+        foreach (Tombstone tombstone in trackedTombstones)
         {
-            for (int j = 0; j < Tombstones.Length; j++)
-            {
-                if (Tombstones[j] != null && Tombstones[j].GetCurrentDurability() > 0)
-                {
-                    possibleLocations.Add(Tombstones[j].transform); 
-                }
-            }
-            possibleLocations.Add(player.transform); 
+            if (tombstone == null || tombstone.GetCurrentDurability() <= 0)
+                continue;
+
+            eligibleCount++;
+            if (UnityEngine.Random.Range(0, eligibleCount) == 0)
+                selected = tombstone;
         }
 
-
-        int i = UnityEngine.Random.Range(0, possibleLocations.Count);
-        return possibleLocations[i]; 
+        return selected;
     }
 }

@@ -89,10 +89,10 @@ public class RoundController : MonoBehaviour
         if (gameController == null || smallEnemySpawner == null || legEnemySpawner == null ||
             playerInteract == null ||
             smallEnemySpawner == legEnemySpawner ||
-            waves == null || waves.Length != 5 || maxSimultaneousEnemies < 1 ||
+            TotalWaves < 1 || maxSimultaneousEnemies < 1 ||
             !smallEnemySpawner.IsConfigured || !legEnemySpawner.IsConfigured)
         {
-            Debug.LogError("RoundController needs a GameController, PlayerInteract, two configured enemy spawners, and exactly five waves.", this);
+            Debug.LogError("RoundController needs a GameController, PlayerInteract, two configured enemy spawners, and at least one wave.", this);
             enabled = false;
         }
     }
@@ -198,7 +198,7 @@ public class RoundController : MonoBehaviour
 
     private bool RegisterSpawn(EnemySpawner spawner)
     {
-        Enemy enemy = spawner.SpawnEnemy();
+        Enemy enemy = spawner.SpawnEnemy(gameController);
         if (enemy == null)
             return false;
 
