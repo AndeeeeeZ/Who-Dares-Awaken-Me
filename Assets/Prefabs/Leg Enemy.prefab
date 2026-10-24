@@ -155,10 +155,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   promptMessage: HIT HIT HIT
-  boomEffect: {fileID: 0}
+  boomEffect: {fileID: -5131370520411995133}
   dieEffect: {fileID: -5131370520411995133}
   maxHealth: 4
-  damageToDurability: 50
+  damageToDurability: -50
   animator: {fileID: 1228880356643179362}
   waitTimeBeforeDestroy: 0.4
   colorChangingSpeed: 2
