@@ -11,6 +11,7 @@ public class PlayerInteract : MonoBehaviour
     [SerializeField]
     private float raycastDistance;
     private InputActions input;
+    public IInteractable CurrentTarget { get; private set; }
 
     private void Awake()
     {
@@ -29,10 +30,16 @@ public class PlayerInteract : MonoBehaviour
         input.Disable();
         input.Player.Interact.performed -= OnInteractPerformed;
         input.Player.Grab.performed -= OnInteractPerformed;
+        CurrentTarget = null;
     }
 
     private void Update()
     {
+        TryGetTarget(out _, out IInteractable target);
+        CurrentTarget = target;
+        if (target is Wall wall)
+            wall.Hold();
+
         if (drawRay)
         {
             Ray ray = new Ray(cam.transform.position, cam.transform.forward);
@@ -42,23 +49,30 @@ public class PlayerInteract : MonoBehaviour
 
     private void OnInteractPerformed(InputAction.CallbackContext context)
     {
-        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
-        // Debug.DrawRay(ray.origin, ray.direction * raycastDistance);
-        RaycastHit hitInfo;
-        if (Physics.Raycast(ray, out hitInfo, raycastDistance, mask))
+        if (TryGetTarget(out Collider hitCollider, out IInteractable target))
         {
-            if (hitInfo.collider.GetComponent<IInteractable>() != null)
-            {
-                hitInfo.collider.GetComponent<IInteractable>().Interact();
+            target.Interact();
 
-                if (hitInfo.collider.GetComponent<Enemy>() != null)
-                {
-                    Debug.Log("Going to hit enemy");
-                    hitInfo.collider.GetComponent<Enemy>().HitBack(transform.position); 
-                }
-            }
+            if (hitCollider.TryGetComponent(out Enemy enemy))
+                enemy.HitBack(transform.position);
         }
     }
 
+    private bool TryGetTarget(out Collider hitCollider, out IInteractable target)
+    {
+        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
+        if (Physics.Raycast(ray, out RaycastHit hit, raycastDistance, mask))
+        {
+            target = hit.collider.GetComponent<IInteractable>();
+            if (target != null)
+            {
+                hitCollider = hit.collider;
+                return true;
+            }
+        }
 
+        hitCollider = null;
+        target = null;
+        return false;
+    }
 }

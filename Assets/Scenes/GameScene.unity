@@ -28506,6 +28506,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1571274699}
+  - component: {fileID: 1571274700}
   m_Layer: 5
   m_Name: Hands
   m_TagString: Untagged
@@ -28538,6 +28539,27 @@ RectTransform:
   m_AnchoredPosition: {x: 16, y: -36.5}
   m_SizeDelta: {x: 800, y: 411}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1571274700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1571274698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61e6c44ecc8e463419843f87f8b21e93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HandController
+  playerInteract: {fileID: 840097497}
+  gameController: {fileID: 2143591776}
+  leftHand: {fileID: 131763873}
+  rightHand: {fileID: 1020653304}
+  center: {fileID: 1742260877}
+  leftHoldBar: {fileID: 1281637225}
+  rightHoldBoard: {fileID: 1085782292}
+  rightHoldHammer: {fileID: 1816955497}
+  promptText: {fileID: 1546055549}
 --- !u!1 &1577055422
 GameObject:
   m_ObjectHideFlags: 0
@@ -31024,7 +31046,6 @@ GameObject:
   - component: {fileID: 1778119689}
   - component: {fileID: 1778119688}
   - component: {fileID: 1778119687}
-  - component: {fileID: 1778119691}
   m_Layer: 5
   m_Name: UI Canvas
   m_TagString: Untagged
@@ -31118,29 +31139,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1778119691
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1778119686}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61e6c44ecc8e463419843f87f8b21e93, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HandController
-  leftHand: {fileID: 131763873}
-  rightHand: {fileID: 1020653304}
-  center: {fileID: 1742260877}
-  leftHoldBar: {fileID: 1281637225}
-  rightHoldBoard: {fileID: 1085782292}
-  rightHoldHammer: {fileID: 1816955497}
-  mask:
-    serializedVersion: 2
-    m_Bits: 64
-  raycastDistance: 7
-  promptText: {fileID: 1546055549}
 --- !u!1 &1784034302
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,212 +1,56 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.InputSystem;
-using TMPro;
 
 public class HandController : MonoBehaviour
 {
-    [SerializeField]
-    private Image leftHand, rightHand, center, leftHoldBar, rightHoldBoard, rightHoldHammer;
-    private InputActions input;
-    // private Animator leftHandAnimator, rightHandAnimator;
-    [SerializeField]
-    private LayerMask mask;
-    [SerializeField]
-    private float raycastDistance;
+    [SerializeField] private PlayerInteract playerInteract;
+    [SerializeField] private GameController gameController;
+    [SerializeField] private Image leftHand;
+    [SerializeField] private Image rightHand;
+    [SerializeField] private Image center;
+    [SerializeField] private Image leftHoldBar;
+    [SerializeField] private Image rightHoldBoard;
+    [SerializeField] private Image rightHoldHammer;
+    [SerializeField] private TextMeshProUGUI promptText;
 
-    [SerializeField]
-    private TextMeshProUGUI promptText;
-    private Camera cam;
-    private void Awake()
-    {
-        input = new InputActions();
-    }
-
-    private void Start()
-    {
-        cam = Camera.main;
-        UpdateVisuals();
-    }
-
-    private void Update()
-    {
-        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
-        // Debug.DrawRay(ray.origin, ray.direction * raycastDistance);
-        RaycastHit hitInfo;
-        if (Physics.Raycast(ray, out hitInfo, raycastDistance, mask))
-        {
-            if (hitInfo.collider.GetComponent<IInteractable>() != null)
-            {
-                promptText.text = hitInfo.collider.GetComponent<IInteractable>().GetPromptMessage();
-                if (hitInfo.collider.GetComponent<Item>() == null
-                    && hitInfo.collider.GetComponent<Wall>() == null
-                    && hitInfo.collider.GetComponent<Door>() == null)
-                {
-                    rightHoldBoard.gameObject.SetActive(false);
-                    rightHand.gameObject.SetActive(false);
-                    rightHoldHammer.gameObject.SetActive(true);
-                }
-
-                if (hitInfo.collider.GetComponent<Wall>() != null)
-                {
-                    hitInfo.collider.GetComponent<Wall>().Hold();
-                    center.gameObject.SetActive(true);
-                    DisableTwoHands();
-                }
-                else
-                {
-                    center.gameObject.SetActive(false);
-                    UpdateVisuals();
-                }
-            }
-            else
-            {
-                promptText.text = "";
-                center.gameObject.SetActive(false);
-                UpdateVisuals();
-            }
-        }
-        else
-        {
-            rightHoldHammer.gameObject.SetActive(false);
-            center.gameObject.SetActive(false);
-            promptText.text = "";
-            UpdateVisuals();
-        }
-    }
-
-    // private void Update()
-    // {
-    //     Ray ray = new Ray(cam.transform.position, cam.transform.forward);
-    //     RaycastHit hitInfo;
-
-    //     bool hitInteractable = false;
-    //     bool hitWall = false;
-    //     bool hitEnemy = false;
-
-    //     if (Physics.Raycast(ray, out hitInfo, raycastDistance, mask))
-    //     {
-    //         IInteractable interactable = hitInfo.collider.GetComponent<IInteractable>();
-
-    //         if (interactable != null)
-    //         {
-    //             hitInteractable = true;
-
-    //             // Check what type of object we hit
-    //             hitWall = hitInfo.collider.GetComponent<Wall>() != null;
-    //             hitEnemy = hitInfo.collider.GetComponent<Enemy>() != null;
-    //             bool hitItem = hitInfo.collider.GetComponent<Item>() != null;
-    //             bool hitDoor = hitInfo.collider.GetComponent<Door>() != null;
-
-    //             // Handle Wall specific logic
-    //             if (hitWall)
-    //             {
-    //                 hitInfo.collider.GetComponent<Wall>().Hold();
-    //                 center.gameObject.SetActive(true);
-    //                 DisableTwoHands();
-    //                 return; // Exit early for walls
-    //             }
-
-    //             // Handle Enemy/other interactables
-    //             if (hitEnemy && !hitItem && !hitDoor)
-    //             {
-    //                 rightHoldBoard.gameObject.SetActive(false);
-    //                 rightHand.gameObject.SetActive(false);
-    //                 rightHoldHammer.gameObject.SetActive(true);
-    //                 return; // Exit early to prevent UpdateVisuals from overriding
-    //             }
-    //         }
-    //     }
-
-    //     // Reset state when not hitting anything special
-    //     if (!hitInteractable)
-    //     {
-    //         promptText.text = "";
-    //     }
-
-    //     if (!hitWall)
-    //     {
-    //         center.gameObject.SetActive(false);
-    //     }
-
-    //     if (!hitEnemy)
-    //     {
-    //         rightHoldHammer.gameObject.SetActive(false);
-    //     }
-
-    //     UpdateVisuals();
-    // }
     private void OnEnable()
     {
-        input.Enable();
-        UpdateVisuals();
-        input.Player.Interact.performed += OnInteract;
-        input.Player.Grab.performed += OnGrab;
-    }
-
-    private void OnDisable()
-    {
-        input.Disable();
-        input.Player.Interact.performed -= OnInteract;
-        input.Player.Grab.performed -= OnGrab;
-    }
-
-    private void OnInteract(InputAction.CallbackContext context)
-    {
-        UpdateVisuals();
-        // if (rightHandAnimator != null)
-        //     rightHandAnimator.Play("Interact");
-        // else
-        //     Debug.LogError("Missing right hand animator");
-    }
-
-    private void OnGrab(InputAction.CallbackContext context)
-    {
-        UpdateVisuals();
-        // if (leftHandAnimator != null)
-        //     leftHandAnimator.Play("Grab");
-        // else
-        //     Debug.LogError("Missing left hand animator");
-    }
-
-    private void UpdateVisuals()
-    {
-        if (GameController.Instance != null && GameController.Instance.isHoldingBar)
+        if (playerInteract == null || gameController == null || leftHand == null || rightHand == null ||
+            center == null || leftHoldBar == null || rightHoldBoard == null || rightHoldHammer == null ||
+            promptText == null)
         {
-            leftHoldBar.gameObject.SetActive(true);
-            leftHand.gameObject.SetActive(false);
-        }
-        else
-        {
-            leftHoldBar.gameObject.SetActive(false);
-            leftHand.gameObject.SetActive(true);
-        }
-
-        if (rightHoldHammer.IsActive())
-        {
-            rightHand.gameObject.SetActive(false);
-            rightHoldBoard.gameObject.SetActive(false);
-        }
-        else if (GameController.Instance != null && GameController.Instance.isHoldingBoard)
-        {
-            rightHoldBoard.gameObject.SetActive(true);
-            rightHand.gameObject.SetActive(false);
-            rightHoldHammer.gameObject.SetActive(false);
-        }
-        else
-        {
-            rightHand.gameObject.SetActive(true);
-            rightHoldHammer.gameObject.SetActive(false);
-            rightHoldBoard.gameObject.SetActive(false);
+            Debug.LogError("HandController has missing Inspector references.", this);
+            enabled = false;
         }
     }
 
-    private void DisableTwoHands()
+    private void LateUpdate()
     {
-        leftHand.gameObject.SetActive(false);
-        leftHoldBar.gameObject.SetActive(false);
-        rightHand.gameObject.SetActive(false);
-        rightHoldHammer.gameObject.SetActive(false);
-        rightHoldBoard.gameObject.SetActive(false);
+        IInteractable target = playerInteract.CurrentTarget;
+
+        string prompt = target != null ? target.GetPromptMessage() : string.Empty;
+        if (promptText.text != prompt)
+            promptText.text = prompt;
+
+        bool holdingBar = gameController.isHoldingBar;
+        bool holdingBoard = gameController.isHoldingBoard;
+        bool aimingAtWall = target is Wall;
+        bool showTwoHandHold = aimingAtWall && holdingBoard;
+        bool showHands = !showTwoHandHold;
+        bool showHammer = target != null && !aimingAtWall && !(target is Item) && !(target is Door);
+
+        SetVisible(center, showTwoHandHold);
+        SetVisible(leftHoldBar, showHands && holdingBar);
+        SetVisible(leftHand, showHands && !holdingBar);
+        SetVisible(rightHoldHammer, showHammer);
+        SetVisible(rightHoldBoard, showHands && !showHammer && holdingBoard);
+        SetVisible(rightHand, showHands && !showHammer && !holdingBoard);
+    }
+
+    private static void SetVisible(Image image, bool visible)
+    {
+        if (image.gameObject.activeSelf != visible)
+            image.gameObject.SetActive(visible);
     }
 }
