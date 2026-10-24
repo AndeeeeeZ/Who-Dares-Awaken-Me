@@ -5074,7 +5074,7 @@ MonoBehaviour:
   promptMessage: CLICK TO FIX TOMBSTONE
   fixPerInteraction: 2
   statePercentage:
-  - 90
+  - 100
   - 60
   - 25
   - 0

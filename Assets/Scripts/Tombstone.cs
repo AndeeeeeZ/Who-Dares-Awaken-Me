@@ -10,6 +10,10 @@ public class Tombstone : HasDurability, IInteractable
     private float[] statePercentage;
     [SerializeField]
     private Mesh[] modelMeshes;
+    [SerializeField]
+    private Color emptyRingColor = Color.red;
+    [SerializeField]
+    private Color fullRingColor = Color.green;
     // [SerializeField]
     // private Material[] modelMaterials;
 
@@ -24,9 +28,16 @@ public class Tombstone : HasDurability, IInteractable
 
     private void Start()
     {
+        durabilityDeclines = false;
         base.OnStart(); 
         meshFilter = GetComponent<MeshFilter>();
         // meshRenderer = GetComponent<MeshRenderer>();
+
+        if (progressBar != null)
+        {
+            progressBar.SetFillColorGradient(emptyRingColor, fullRingColor);
+            progressBar.FaceMainCamera();
+        }
 
         if (statePercentage.Length != modelMeshes.Length)
         {

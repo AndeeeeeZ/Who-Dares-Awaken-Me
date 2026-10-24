@@ -6,7 +6,8 @@ This checklist turns the plan in `agent.md` into implementation work. The game h
 
 ## 1. Make the tombstone rules work with preparation
 
-- [ ] **[Code]** Stop passive tombstone durability loss. The current prefab starts each tombstone at 50/100 and loses 1 health every 0.5 seconds, so all can reach zero within 25 seconds of a 30-second preparation phase.
+- [x] **[Code]** Stop passive tombstone durability loss. `Tombstone.Start` now disables the serialized decay setting without changing the prefab.
+- [x] **[Code]** Make the tombstone progress ring change from red at zero health to green at full health and face the main camera.
 - [ ] **[Code]** Make repair meaningful within 30 seconds. Current repair is 2 health per click; choose a faster amount or a short hold-to-repair action.
 - [ ] **[Code]** Give each tombstone a clear broken state at zero health. Allow repair from zero while at least one tombstone remains unbroken.
 - [ ] **[Code]** Trigger defeat immediately when all eight tombstones are at zero; stop spawning and player interactions after the result.

@@ -8,11 +8,29 @@ public class ProgressBar : MonoBehaviour
 
     // [SerializeField, Range(0f, 1f)]
     private float currentPercentage;
+    private bool useFillColorGradient;
+    private Color emptyColor, fullColor;
+    private Transform worldSpaceCanvas, mainCamera;
 
     private void Start()
     {
-        currentPercentage = 0f;
         UpdateVisuals();
+    }
+
+    private void LateUpdate()
+    {
+        if (worldSpaceCanvas == null)
+            return;
+
+        if (mainCamera == null)
+        {
+            Camera camera = Camera.main;
+            if (camera == null)
+                return;
+            mainCamera = camera.transform;
+        }
+
+        worldSpaceCanvas.rotation = mainCamera.rotation;
     }
 
     // Percentage between 0 to 1
@@ -22,9 +40,26 @@ public class ProgressBar : MonoBehaviour
         UpdateVisuals();
     }
 
+    public void SetFillColorGradient(Color empty, Color full)
+    {
+        emptyColor = empty;
+        fullColor = full;
+        useFillColorGradient = true;
+        UpdateVisuals();
+    }
+
+    public void FaceMainCamera()
+    {
+        Canvas canvas = GetComponentInParent<Canvas>();
+        if (canvas != null && canvas.renderMode == RenderMode.WorldSpace)
+            worldSpaceCanvas = canvas.transform;
+    }
+
     private void UpdateVisuals()
     {
         displayLayer.fillAmount = currentPercentage;
+        if (useFillColorGradient)
+            displayLayer.color = Color.Lerp(emptyColor, fullColor, currentPercentage);
     }
 
     public void ShowProgressBar()
