@@ -22,12 +22,15 @@ public class Wall : HasDurability, IInteractable
 
     private float wallTimer;
     public bool isHolding, boardPlaced;
+    public bool IsDefending => boardPlaced && GetCurrentDurability() > 0;
     private void Start()
     {
         base.OnStart();
         isHolding = false;
         boardPlaced = false;
         fixBoard.SetActive(false);
+        currentDurability = 0;
+        UpdateDurabilityDisplay();
     }
 
     private void LateUpdate()
@@ -52,7 +55,7 @@ public class Wall : HasDurability, IInteractable
             GameController.Instance.isHoldingBoard = false;
             isHolding = true;
 
-            AddCurrentDurability(amountPerClick);
+            AddCurrentDurability(Mathf.Max(1, amountPerClick));
         }
     }
 
@@ -68,10 +71,14 @@ public class Wall : HasDurability, IInteractable
 
     protected override int DurabilityUpdateCheck()
     {
-        if (currentDurability == maxDurability)
+        if (boardPlaced && currentDurability <= 0)
         {
-            // isBroken = false; 
+            boardPlaced = false;
+            fixBoard.SetActive(false);
+            wallTimer = 0f;
         }
+
+        isBroken = currentDurability < maxDurability;
         return 0; 
     }
 }

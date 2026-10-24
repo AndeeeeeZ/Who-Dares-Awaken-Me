@@ -3,7 +3,7 @@ using UnityEngine.AI;
 
 public class EnemyPathfinding : MonoBehaviour
 {
-    private Tombstone target;
+    private HasDurability target;
     private GameController gameController;
 
     [SerializeField]
@@ -20,8 +20,8 @@ public class EnemyPathfinding : MonoBehaviour
         timer += Time.deltaTime;
         if (timer >= intervalPerCheckTarget)
         {
-            if (target == null || target.GetCurrentDurability() <= 0)
-                target = gameController != null ? gameController.GetEnemyTarget() : null;
+            if (gameController != null && !gameController.IsEnemyTargetActive(target))
+                target = gameController.GetEnemyTarget();
 
             if (agent.enabled && target != null)
                 agent.SetDestination(target.transform.position);
@@ -29,10 +29,12 @@ public class EnemyPathfinding : MonoBehaviour
         }
     }
 
-    public void SetTarget(Tombstone t, GameController controller)
+    public void SetTarget(HasDurability t, GameController controller)
     {
         target = t;
         gameController = controller;
+        // Impact is triggered by collider contact, including for the leg enemy prefab.
+        agent.stoppingDistance = 0f;
         if (agent.enabled && target != null)
             agent.SetDestination(target.transform.position);
     }

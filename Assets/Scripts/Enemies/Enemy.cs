@@ -106,67 +106,32 @@ public class Enemy : MonoBehaviour, IInteractable
         if (dead)
             return;
 
-        Debug.Log($"OnTriggerEnter called with: {otherC.gameObject.name}");
-
-        GameObject other = otherC.gameObject;
-
-        if (otherC.gameObject.CompareTag("Floor"))
+        if (otherC.CompareTag("Floor"))
         {
             agent.enabled = true;
             rb.isKinematic = true;
         }
 
-        if (other.GetComponent<HasDurability>() != null)
-        {
-            Debug.Log("Has HasDurability component");
+        if (!otherC.TryGetComponent(out HasDurability damageTarget))
+            return;
 
-            Tombstone tombstone = other.GetComponent<Tombstone>();
-            if (tombstone != null && tombstone.GetCurrentDurability() <= 0)
-                return;
+        if (damageTarget is Tombstone tombstone && tombstone.GetCurrentDurability() <= 0)
+            return;
+        if (damageTarget is Door door && !door.IsDefending)
+            return;
+        if (damageTarget is Wall wall && !wall.IsDefending)
+            return;
 
-            if (other.GetComponent<Wall>() != null)
-            {
-                Debug.Log($"Is Wall, boardPlaced: {other.GetComponent<Wall>().boardPlaced}");
-                if (!other.GetComponent<Wall>().boardPlaced)
-                {
-                    Debug.Log("Wall board not placed, returning");
-                    return;
-                }
-            }
-
-            if (other.GetComponent<Door>() != null)
-            {
-                Debug.Log($"Is Door, locked: {other.GetComponent<Door>().locked}");
-                if (!other.GetComponent<Door>().locked)
-                {
-                    Debug.Log("Door not locked, returning");
-                    return;
-                }
-            }
-
-            if (!dead)
-            {
-                Debug.Log("Enemy exploding!");
-                if (boomEffect != null)
-                    boomEffect.PlayOneShot();
-                other.GetComponent<HasDurability>().AddCurrentDurability(damageToDurability);
-                Resolve();
-                if (haveExplosionEffect)
-                    animator.Play("Explode");
-                Destroy(gameObject, waitTimeBeforeDestroy);
-            }
-            else
-            {
-                Debug.Log("Enemy already dead, not exploding");
-            }
-        }
-        else
-        {
-            Debug.Log("No HasDurability component found");
-        }
+        if (boomEffect != null)
+            boomEffect.PlayOneShot();
+        damageTarget.AddCurrentDurability(damageToDurability);
+        Resolve();
+        if (haveExplosionEffect)
+            animator.Play("Explode");
+        Destroy(gameObject, waitTimeBeforeDestroy);
     }
 
-    public void FindTarget(Tombstone target, GameController gameController)
+    public void FindTarget(HasDurability target, GameController gameController)
     {
         if (target != null)
         {

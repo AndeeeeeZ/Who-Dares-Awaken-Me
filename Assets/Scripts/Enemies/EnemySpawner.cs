@@ -19,7 +19,7 @@ public class EnemySpawner : MonoBehaviour
             return null;
         }
 
-        Tombstone target = gameController.GetEnemyTarget();
+        HasDurability target = gameController.GetEnemyTarget();
         if (target == null)
             return null;
 

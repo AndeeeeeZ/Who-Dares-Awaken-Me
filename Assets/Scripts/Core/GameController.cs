@@ -150,10 +150,41 @@ public class GameController : MonoBehaviour
         SceneManager.LoadScene(nextSceneName, LoadSceneMode.Single);
     }
     
-    public Tombstone GetEnemyTarget()
+    public HasDurability GetEnemyTarget()
     {
-        Tombstone selected = null;
+        HasDurability selected = null;
         int eligibleCount = 0;
+
+        if (Doors != null)
+        {
+            foreach (Door door in Doors)
+            {
+                if (door == null || !door.IsDefending)
+                    continue;
+
+                eligibleCount++;
+                if (UnityEngine.Random.Range(0, eligibleCount) == 0)
+                    selected = door;
+            }
+        }
+
+        if (Walls != null)
+        {
+            foreach (Wall wall in Walls)
+            {
+                if (wall == null || !wall.IsDefending)
+                    continue;
+
+                eligibleCount++;
+                if (UnityEngine.Random.Range(0, eligibleCount) == 0)
+                    selected = wall;
+            }
+        }
+
+        if (selected != null)
+            return selected;
+
+        eligibleCount = 0;
         foreach (Tombstone tombstone in trackedTombstones)
         {
             if (tombstone == null || tombstone.GetCurrentDurability() <= 0)
@@ -165,5 +196,43 @@ public class GameController : MonoBehaviour
         }
 
         return selected;
+    }
+
+    public bool IsEnemyTargetActive(HasDurability target)
+    {
+        if (target == null)
+            return false;
+
+        if (target is Door door)
+            return door.IsDefending;
+
+        if (target is Wall wall)
+            return wall.IsDefending;
+
+        return target is Tombstone tombstone && tombstone.GetCurrentDurability() > 0 &&
+               !HasActiveDefenses();
+    }
+
+    private bool HasActiveDefenses()
+    {
+        if (Doors != null)
+        {
+            foreach (Door door in Doors)
+            {
+                if (door != null && door.IsDefending)
+                    return true;
+            }
+        }
+
+        if (Walls != null)
+        {
+            foreach (Wall wall in Walls)
+            {
+                if (wall != null && wall.IsDefending)
+                    return true;
+            }
+        }
+
+        return false;
     }
 }
