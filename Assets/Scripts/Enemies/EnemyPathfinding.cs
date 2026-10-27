@@ -13,6 +13,8 @@ public class EnemyPathfinding : MonoBehaviour
     private NavMeshAgent agent;
     private NavMeshPath path;
     private Door blockingDoor;
+    private HasDurability destinationTarget;
+    private Vector3 destinationPosition;
     private float timer;
     public HasDurability CurrentTarget => target;
 
@@ -42,8 +44,7 @@ public class EnemyPathfinding : MonoBehaviour
             if (blockingDoor == null && target is Tombstone && agent.enabled && agent.isOnNavMesh)
                 FindBlockingDoor();
 
-            if (agent.enabled && agent.isOnNavMesh && target != null)
-                agent.SetDestination(target.transform.position);
+            UpdateDestination();
             timer %= intervalPerCheckTarget; 
         }
     }
@@ -55,8 +56,38 @@ public class EnemyPathfinding : MonoBehaviour
         blockingDoor = null;
         // Keep the agent moving to the target edge; Enemy handles contact and door reach.
         agent.stoppingDistance = 0f;
-        if (agent.enabled && agent.isOnNavMesh && target != null)
-            agent.SetDestination(target.transform.position);
+        UpdateDestination();
+    }
+
+    public void RefreshDestination()
+    {
+        destinationTarget = null;
+        UpdateDestination();
+    }
+
+    private void UpdateDestination()
+    {
+        if (!agent.enabled || !agent.isOnNavMesh)
+            return;
+
+        if (target == null)
+        {
+            if (destinationTarget != null)
+                agent.ResetPath();
+            destinationTarget = null;
+            return;
+        }
+
+        Vector3 position = target.transform.position;
+        if (destinationTarget == target &&
+            (position - destinationPosition).sqrMagnitude < 0.01f)
+            return;
+
+        if (agent.SetDestination(position))
+        {
+            destinationTarget = target;
+            destinationPosition = position;
+        }
     }
 
     private void FindBlockingDoor()

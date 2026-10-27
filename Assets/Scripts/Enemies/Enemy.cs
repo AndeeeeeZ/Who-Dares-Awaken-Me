@@ -118,8 +118,12 @@ public class Enemy : MonoBehaviour, IInteractable
 
         if (otherC.CompareTag("Floor"))
         {
-            agent.enabled = true;
-            rb.isKinematic = true;
+            if (!agent.enabled)
+            {
+                agent.enabled = true;
+                rb.isKinematic = true;
+                pathfinding.RefreshDestination();
+            }
         }
 
         if (!otherC.TryGetComponent(out HasDurability damageTarget))
