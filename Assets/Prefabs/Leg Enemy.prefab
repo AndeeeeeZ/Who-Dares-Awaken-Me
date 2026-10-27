@@ -49,7 +49,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 302582205297103264}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 2.05
+  m_Radius: 1
   m_Speed: 20
   m_Acceleration: 15
   avoidancePriority: 50
@@ -74,7 +74,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e510dc05960eb6c4ca6d2f21f72d0823, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyPathfinding
-  target: {fileID: 0}
   intervalPerCheckTarget: 1
 --- !u!65 &783958324808455040
 BoxCollider:
