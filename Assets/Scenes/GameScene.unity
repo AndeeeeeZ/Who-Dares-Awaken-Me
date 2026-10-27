@@ -246,13 +246,13 @@ MonoBehaviour:
   tombstoneIcon: {fileID: 0}
   doorIcon: {fileID: 0}
   wallIcon: {fileID: 0}
-  enemyIcon: {fileID: 0}
+  enemyIcon: {fileID: 2061910740, guid: 934d12732a03ffe4abb4fc5e6d47cfb8, type: 3}
   healthyColor: {r: 0, g: 1, b: 0, a: 1}
-  damagedColor: {r: 1, g: 0, b: 0, a: 1}
-  brokenColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  damagedColor: {r: 1, g: 0.51692367, b: 0, a: 1}
+  brokenColor: {r: 1, g: 0, b: 0, a: 1}
   securedColor: {r: 0, g: 1, b: 1, a: 1}
   unsecuredColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  enemyColor: {r: 1, g: 0, b: 0, a: 1}
+  enemyColor: {r: 1, g: 1, b: 1, a: 1}
   damageFlashColor: {r: 1, g: 1, b: 1, a: 1}
   attackPulseColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   attackDistance: 8
@@ -531,6 +531,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 766806137}
     m_Modifications:
+    - target: {fileID: 3456837528970439136, guid: f40b897102623f246a50e22702a55ee1, type: 3}
+      propertyPath: fixPerInteraction
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 5163690588371404103, guid: f40b897102623f246a50e22702a55ee1, type: 3}
       propertyPath: m_Name
       value: Tombstone (7)
@@ -16775,6 +16779,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 766806137}
     m_Modifications:
+    - target: {fileID: 3456837528970439136, guid: f40b897102623f246a50e22702a55ee1, type: 3}
+      propertyPath: fixPerInteraction
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 5163690588371404103, guid: f40b897102623f246a50e22702a55ee1, type: 3}
       propertyPath: m_Name
       value: Tombstone (4)
@@ -17008,6 +17016,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 766806137}
     m_Modifications:
+    - target: {fileID: 3456837528970439136, guid: f40b897102623f246a50e22702a55ee1, type: 3}
+      propertyPath: fixPerInteraction
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 5163690588371404103, guid: f40b897102623f246a50e22702a55ee1, type: 3}
       propertyPath: m_Name
       value: Tombstone (6)
@@ -17797,6 +17809,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 766806137}
     m_Modifications:
+    - target: {fileID: 3456837528970439136, guid: f40b897102623f246a50e22702a55ee1, type: 3}
+      propertyPath: fixPerInteraction
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 5163690588371404103, guid: f40b897102623f246a50e22702a55ee1, type: 3}
       propertyPath: m_Name
       value: Tombstone (5)
@@ -25424,6 +25440,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 766806137}
     m_Modifications:
+    - target: {fileID: 3456837528970439136, guid: f40b897102623f246a50e22702a55ee1, type: 3}
+      propertyPath: fixPerInteraction
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 5163690588371404103, guid: f40b897102623f246a50e22702a55ee1, type: 3}
       propertyPath: m_Name
       value: Tombstone (2)
@@ -30193,6 +30213,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 766806137}
     m_Modifications:
+    - target: {fileID: 3456837528970439136, guid: f40b897102623f246a50e22702a55ee1, type: 3}
+      propertyPath: fixPerInteraction
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 5163690588371404103, guid: f40b897102623f246a50e22702a55ee1, type: 3}
       propertyPath: m_Name
       value: Tombstone (1)
@@ -36116,6 +36140,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 766806137}
     m_Modifications:
+    - target: {fileID: 3456837528970439136, guid: f40b897102623f246a50e22702a55ee1, type: 3}
+      propertyPath: fixPerInteraction
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 5163690588371404103, guid: f40b897102623f246a50e22702a55ee1, type: 3}
       propertyPath: m_Name
       value: Tombstone (3)
@@ -37025,6 +37053,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 766806137}
     m_Modifications:
+    - target: {fileID: 3456837528970439136, guid: f40b897102623f246a50e22702a55ee1, type: 3}
+      propertyPath: fixPerInteraction
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 5163690588371404103, guid: f40b897102623f246a50e22702a55ee1, type: 3}
       propertyPath: m_Name
       value: Tombstone
