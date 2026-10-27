@@ -243,10 +243,10 @@ MonoBehaviour:
   gameController: {fileID: 2143591776}
   roundController: {fileID: 1657323096}
   markerPrefab: {fileID: 7670222507737981258, guid: b19bcdc1ba782f342b9e85bef989e927, type: 3}
-  tombstoneIcon: {fileID: 0}
+  tombstoneIcon: {fileID: 197642567, guid: 12714fcad9187d243b13118473a0860c, type: 3}
   doorIcon: {fileID: 0}
   wallIcon: {fileID: 0}
-  enemyIcon: {fileID: 2061910740, guid: 934d12732a03ffe4abb4fc5e6d47cfb8, type: 3}
+  enemyIcon: {fileID: 970115060, guid: 9e9b3f03af307e64594fdc11a07e4196, type: 3}
   healthyColor: {r: 0, g: 1, b: 0, a: 1}
   damagedColor: {r: 1, g: 0.51692367, b: 0, a: 1}
   brokenColor: {r: 1, g: 0, b: 0, a: 1}
@@ -11302,6 +11302,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pumpkin_Carved_C (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8915222768356994669, guid: 737b2ceae882db340aac61b2125abb1e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8949640516943333765, guid: 737b2ceae882db340aac61b2125abb1e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.892948
@@ -19066,8 +19070,6 @@ GameObject:
   - component: {fileID: 845659658}
   - component: {fileID: 845659657}
   - component: {fileID: 845659656}
-  - component: {fileID: 845659655}
-  - component: {fileID: 845659654}
   m_Layer: 0
   m_Name: Floor (1)
   m_TagString: Floor
@@ -19075,59 +19077,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &845659654
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 845659653}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshSurface
-  m_SerializedVersion: 0
-  m_AgentTypeID: 0
-  m_CollectObjects: 0
-  m_Size: {x: 10, y: 10, z: 10}
-  m_Center: {x: 0, y: 2, z: 0}
-  m_LayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_UseGeometry: 0
-  m_DefaultArea: 0
-  m_GenerateLinks: 0
-  m_IgnoreNavMeshAgent: 1
-  m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 0
-  m_TileSize: 256
-  m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
-  m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 21ff9bfbdd8433f4380d5a32a7816e9c, type: 2}
-  m_BuildHeightMesh: 0
---- !u!65 &845659655
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 845659653}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &845659656
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -28240,17 +28189,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 743297895}
     m_Modifications:
+    - target: {fileID: 2526086064539204908, guid: 17ecc69fedc732d4b96ab4722d7dd95f, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2631453040503233218, guid: 17ecc69fedc732d4b96ab4722d7dd95f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.0902805
+      value: -1.277
       objectReference: {fileID: 0}
     - target: {fileID: 2631453040503233218, guid: 17ecc69fedc732d4b96ab4722d7dd95f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.13274
+      value: -1.96
       objectReference: {fileID: 0}
     - target: {fileID: 2631453040503233218, guid: 17ecc69fedc732d4b96ab4722d7dd95f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 20.944073
+      value: 21.115
       objectReference: {fileID: 0}
     - target: {fileID: 2631453040503233218, guid: 17ecc69fedc732d4b96ab4722d7dd95f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -38620,6 +38573,7 @@ MonoBehaviour:
   Doors:
   - {fileID: 1494045082}
   - {fileID: 558344988}
+  - {fileID: 99314342}
   Walls:
   - {fileID: 2110884887}
 --- !u!4 &2143591777
