@@ -17,6 +17,9 @@ public class GameController : MonoBehaviour
     [SerializeField, Min(1)]
     private int maximumStartingDurability = 75;
     public Door[] Doors;
+    [Header("Door Starting State")]
+    [SerializeField, Min(0)]
+    private int startingOpenDoors = 1;
     public Wall[] Walls; 
 
     private readonly List<Tombstone> trackedTombstones = new List<Tombstone>();
@@ -40,6 +43,7 @@ public class GameController : MonoBehaviour
 
         Instance = this;
         TrackTombstones();
+        InitializeDoors();
     }
 
     private void Start()
@@ -87,6 +91,37 @@ public class GameController : MonoBehaviour
             trackedTombstones.Add(tombstone);
             tombstone.DurabilityChanged += OnTombstoneDurabilityChanged;
         }
+    }
+
+    private void InitializeDoors()
+    {
+        if (Doors == null)
+            return;
+
+        List<Door> shuffled = new List<Door>();
+        foreach (Door door in Doors)
+        {
+            if (door == null)
+            {
+                Debug.LogWarning("GameController has a missing door reference.", this);
+                continue;
+            }
+
+            if (!shuffled.Contains(door))
+                shuffled.Add(door);
+        }
+
+        for (int i = shuffled.Count - 1; i > 0; i--)
+        {
+            int swapIndex = UnityEngine.Random.Range(0, i + 1);
+            Door temporary = shuffled[i];
+            shuffled[i] = shuffled[swapIndex];
+            shuffled[swapIndex] = temporary;
+        }
+
+        int openCount = Mathf.Clamp(startingOpenDoors, 0, shuffled.Count);
+        for (int i = 0; i < shuffled.Count; i++)
+            shuffled[i].SetStartingOpenState(i < openCount);
     }
 
     private void OnTombstoneDurabilityChanged(Tombstone tombstone)

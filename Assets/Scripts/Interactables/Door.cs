@@ -17,23 +17,24 @@ public class Door : HasDurability, IInteractable
     [SerializeField]
     private GameObject open, close;
 
+    [SerializeField]
+    private Collider attackCollider;
+
+    public Collider AttackCollider => attackCollider;
+
     private void Start()
     {
+        locked = !isOpen;
+        currentDurability = locked ? maxDurability : 0;
         base.OnStart();
-        fixChain.SetActive(false);
-        if (isOpen)
-        {
-            open.SetActive(true);
-            close.SetActive(false);
-        }
-        else
-        {
-            open.SetActive(false);
-            close.SetActive(true); 
-        }
-        locked = false;
-        currentDurability = 0;
-        UpdateDurabilityDisplay();
+        fixChain.SetActive(locked);
+        open.SetActive(isOpen);
+        close.SetActive(!isOpen);
+    }
+
+    public void SetStartingOpenState(bool shouldOpen)
+    {
+        isOpen = shouldOpen;
     }
     
     public void Interact()

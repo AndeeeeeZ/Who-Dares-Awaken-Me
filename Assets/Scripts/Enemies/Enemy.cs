@@ -33,6 +33,9 @@ public class Enemy : MonoBehaviour, IInteractable
     [SerializeField]
     private float pushbackForce, pushUpForce;
 
+    [SerializeField, Min(0f)]
+    private float doorAttackReach = 2f;
+
     private NavMeshAgent agent;
     private bool dead, changingBackColor;
     private Color originalColor;
@@ -52,6 +55,12 @@ public class Enemy : MonoBehaviour, IInteractable
 
     private void Update()
     {
+        if (!dead && CurrentTarget is Door door && door.IsDefending && door.AttackCollider != null &&
+            Vector3.Distance(transform.position, door.AttackCollider.ClosestPoint(transform.position)) <= doorAttackReach)
+        {
+            Impact(door);
+        }
+
         if (changingBackColor)
         {
             spriteRenderer.color = Color.Lerp(spriteRenderer.color, originalColor, colorChangingSpeed * Time.deltaTime);
@@ -127,6 +136,11 @@ public class Enemy : MonoBehaviour, IInteractable
         if (damageTarget is Wall wall && !wall.IsDefending)
             return;
 
+        Impact(damageTarget);
+    }
+
+    private void Impact(HasDurability damageTarget)
+    {
         if (boomEffect != null)
             boomEffect.PlayOneShot();
         damageTarget.AddCurrentDurability(damageToDurability);

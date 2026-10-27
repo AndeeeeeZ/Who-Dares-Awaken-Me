@@ -1301,8 +1301,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 6.192946, z: 11.841836}
-  m_Center: {x: 0, y: 0.8564584, z: -3.024303}
+  m_Size: {x: 1.56, y: 6.192946, z: 8.37}
+  m_Center: {x: 6.82, y: 1, z: 2.9}
 --- !u!114 &99314342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1330,6 +1330,7 @@ MonoBehaviour:
   locked: 0
   open: {fileID: 806542874}
   close: {fileID: 1022687767}
+  attackCollider: {fileID: 99314341}
 --- !u!1001 &109044529
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11075,7 +11076,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 6.192946, z: 11.841836}
+  m_Size: {x: 2.04, y: 6.192946, z: 11.841836}
   m_Center: {x: 0, y: 0.8564584, z: -3.024303}
 --- !u!114 &558344988
 MonoBehaviour:
@@ -11104,6 +11105,7 @@ MonoBehaviour:
   locked: 0
   open: {fileID: 258212136}
   close: {fileID: 1765108912}
+  attackCollider: {fileID: 558344987}
 --- !u!1 &558556952
 GameObject:
   m_ObjectHideFlags: 0
@@ -29456,6 +29458,7 @@ MonoBehaviour:
   locked: 0
   open: {fileID: 1537125391}
   close: {fileID: 1989266960}
+  attackCollider: {fileID: 1494045084}
 --- !u!4 &1494045083
 Transform:
   m_ObjectHideFlags: 0
@@ -29493,7 +29496,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 6.192946, z: 11.841836}
+  m_Size: {x: 3.15, y: 6.192946, z: 11.841836}
   m_Center: {x: 0, y: 0.8564584, z: -3.024303}
 --- !u!1001 &1506677013
 PrefabInstance:
@@ -38565,13 +38568,14 @@ MonoBehaviour:
   - {fileID: 723058485}
   - {fileID: 822459542}
   - {fileID: 735209913}
-  startingBrokenTombstones: 7
-  minimumStartingDurability: 1
-  maximumStartingDurability: 1
+  startingBrokenTombstones: 4
+  minimumStartingDurability: 25
+  maximumStartingDurability: 75
   Doors:
   - {fileID: 1494045082}
   - {fileID: 558344988}
   - {fileID: 99314342}
+  startingOpenDoors: 1
   Walls:
   - {fileID: 2110884887}
 --- !u!4 &2143591777
