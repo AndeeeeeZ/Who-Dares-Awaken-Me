@@ -41,7 +41,8 @@ public class CameraMovement : MonoBehaviour
             enabled = false;
             return;
         }
-        xCameraRotation = 180f;
+        xCameraRotation = Mathf.DeltaAngle(0f, cameraTransform.eulerAngles.x);
+        yCameraRotation = cameraTransform.eulerAngles.y;
     }
 
     private void LateUpdate()
