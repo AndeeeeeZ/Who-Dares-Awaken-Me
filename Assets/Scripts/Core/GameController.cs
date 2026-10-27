@@ -150,6 +150,20 @@ public class GameController : MonoBehaviour
         HasDurability selected = null;
         int eligibleCount = 0;
 
+        foreach (Tombstone tombstone in trackedTombstones)
+        {
+            if (tombstone == null || tombstone.GetCurrentDurability() <= 0)
+                continue;
+
+            eligibleCount++;
+            if (UnityEngine.Random.Range(0, eligibleCount) == 0)
+                selected = tombstone;
+        }
+
+        if (selected != null)
+            return selected;
+
+        eligibleCount = 0;
         if (Doors != null)
         {
             foreach (Door door in Doors)
@@ -176,20 +190,6 @@ public class GameController : MonoBehaviour
             }
         }
 
-        if (selected != null)
-            return selected;
-
-        eligibleCount = 0;
-        foreach (Tombstone tombstone in trackedTombstones)
-        {
-            if (tombstone == null || tombstone.GetCurrentDurability() <= 0)
-                continue;
-
-            eligibleCount++;
-            if (UnityEngine.Random.Range(0, eligibleCount) == 0)
-                selected = tombstone;
-        }
-
         return selected;
     }
 
@@ -199,33 +199,20 @@ public class GameController : MonoBehaviour
             return false;
 
         if (target is Door door)
-            return door.IsDefending;
+            return door.IsDefending && !HasStandingTombstones();
 
         if (target is Wall wall)
-            return wall.IsDefending;
+            return wall.IsDefending && !HasStandingTombstones();
 
-        return target is Tombstone tombstone && tombstone.GetCurrentDurability() > 0 &&
-               !HasActiveDefenses();
+        return target is Tombstone tombstone && tombstone.GetCurrentDurability() > 0;
     }
 
-    private bool HasActiveDefenses()
+    private bool HasStandingTombstones()
     {
-        if (Doors != null)
+        foreach (Tombstone tombstone in trackedTombstones)
         {
-            foreach (Door door in Doors)
-            {
-                if (door != null && door.IsDefending)
-                    return true;
-            }
-        }
-
-        if (Walls != null)
-        {
-            foreach (Wall wall in Walls)
-            {
-                if (wall != null && wall.IsDefending)
-                    return true;
-            }
+            if (tombstone != null && tombstone.GetCurrentDurability() > 0)
+                return true;
         }
 
         return false;

@@ -116,6 +116,10 @@ public class Enemy : MonoBehaviour, IInteractable
         if (!otherC.TryGetComponent(out HasDurability damageTarget))
             return;
 
+        HasDurability currentTarget = CurrentTarget;
+        if (currentTarget == null || currentTarget.GetCurrentDurability() <= 0)
+            return;
+
         if (damageTarget is Tombstone tombstone && tombstone.GetCurrentDurability() <= 0)
             return;
         if (damageTarget is Door door && !door.IsDefending)
