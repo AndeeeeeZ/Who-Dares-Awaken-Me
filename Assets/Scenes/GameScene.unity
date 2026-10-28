@@ -20456,7 +20456,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &897919359
 RectTransform:
   m_ObjectHideFlags: 0
@@ -31392,7 +31392,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: The best time was xx.xx seconds
+  m_text: Your best time was xx.xx seconds
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4a9f2d857ee36214f90da64635801738, type: 2}
   m_sharedMaterial: {fileID: 5959734415643236337, guid: 4a9f2d857ee36214f90da64635801738, type: 2}
@@ -42060,7 +42060,7 @@ MonoBehaviour:
   - {fileID: 723058485}
   - {fileID: 822459542}
   - {fileID: 735209913}
-  startingBrokenTombstones: 1
+  startingBrokenTombstones: 6
   minimumStartingDurability: 10
   maximumStartingDurability: 30
   Doors:
