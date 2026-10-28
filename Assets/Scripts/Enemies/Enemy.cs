@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 public class Enemy : MonoBehaviour, IInteractable
 {
     [SerializeField]
@@ -33,8 +34,9 @@ public class Enemy : MonoBehaviour, IInteractable
     [SerializeField]
     private float pushbackForce, pushUpForce;
 
+    [FormerlySerializedAs("doorAttackReach")]
     [SerializeField, Min(0f)]
-    private float doorAttackReach = 2f;
+    private float defenseAttackReach = 2f;
 
     private NavMeshAgent agent;
     private bool dead, changingBackColor;
@@ -55,10 +57,13 @@ public class Enemy : MonoBehaviour, IInteractable
 
     private void Update()
     {
-        if (!dead && CurrentTarget is Door door && door.IsDefending && door.AttackCollider != null &&
-            Vector3.Distance(transform.position, door.AttackCollider.ClosestPoint(transform.position)) <= doorAttackReach)
+        if (!dead && CurrentTarget is Door door && door.IsDefending)
         {
-            Impact(door);
+            TryImpactAtReach(door, door.AttackCollider);
+        }
+        else if (!dead && CurrentTarget is Wall wall && wall.IsDefending)
+        {
+            TryImpactAtReach(wall, wall.AttackCollider);
         }
 
         if (changingBackColor)
@@ -152,6 +157,15 @@ public class Enemy : MonoBehaviour, IInteractable
         if (haveExplosionEffect)
             animator.Play("Explode");
         Destroy(gameObject, waitTimeBeforeDestroy);
+    }
+
+    private void TryImpactAtReach(HasDurability damageTarget, Collider attackCollider)
+    {
+        if (attackCollider == null ||
+            Vector3.Distance(transform.position, attackCollider.ClosestPoint(transform.position)) > defenseAttackReach)
+            return;
+
+        Impact(damageTarget);
     }
 
     public void FindTarget(HasDurability target, GameController gameController)

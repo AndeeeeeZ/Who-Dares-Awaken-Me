@@ -7,6 +7,10 @@ public class Wall : HasDurability, IInteractable
 
     [SerializeField]
     private GameObject fixBoard;
+    [SerializeField]
+    private Collider attackCollider;
+
+    public Collider AttackCollider => attackCollider;
 
     [SerializeField]
     private bool isBroken;
@@ -22,6 +26,9 @@ public class Wall : HasDurability, IInteractable
     public bool IsDefending => boardPlaced && GetCurrentDurability() > 0;
     private void Start()
     {
+        if (attackCollider == null)
+            Debug.LogWarning("Wall needs its attack collider assigned for enemy targeting.", this);
+
         base.OnStart();
         isHolding = false;
         boardPlaced = false;

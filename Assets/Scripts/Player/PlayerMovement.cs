@@ -90,6 +90,9 @@ public class PlayerMovement : MonoBehaviour
     {
         if (remainingJumps > 0)
         {
+            Vector3 velocity = rb.linearVelocity;
+            velocity.y = 0f;
+            rb.linearVelocity = velocity;
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             remainingJumps--;
         }

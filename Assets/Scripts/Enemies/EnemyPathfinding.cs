@@ -8,12 +8,12 @@ public class EnemyPathfinding : MonoBehaviour
 
     [SerializeField]
     private float intervalPerCheckTarget;
-    [SerializeField, Min(0f)]
-    private float blockedDoorSearchDistance = 5f;
+    [SerializeField, Min(0.1f)]
+    private float targetSampleDistance = 8f;
     private NavMeshAgent agent;
     private NavMeshPath path;
-    private Door blockingDoor;
     private HasDurability destinationTarget;
+    private Vector3 desiredPosition;
     private Vector3 destinationPosition;
     private float timer;
     public HasDurability CurrentTarget => target;
@@ -26,50 +26,142 @@ public class EnemyPathfinding : MonoBehaviour
     private void Update()
     {
         timer += Time.deltaTime;
-        if (timer >= intervalPerCheckTarget)
-        {
-            if (blockingDoor != null)
-            {
-                if (!blockingDoor.IsDefending || blockingDoor.AttackCollider == null)
-                {
-                    blockingDoor = null;
-                    target = gameController != null ? gameController.GetEnemyTarget() : null;
-                }
-            }
-            else if (gameController != null && !gameController.IsEnemyTargetActive(target))
-            {
-                target = gameController.GetEnemyTarget();
-            }
+        if (timer < intervalPerCheckTarget)
+            return;
 
-            if (blockingDoor == null && target is Tombstone && agent.enabled && agent.isOnNavMesh)
-                FindBlockingDoor();
+        timer %= intervalPerCheckTarget;
+        if (!agent.enabled || !agent.isOnNavMesh)
+            return;
 
-            UpdateDestination();
-            timer %= intervalPerCheckTarget; 
-        }
+        SelectTarget();
+        UpdateDestination();
     }
 
-    public void SetTarget(HasDurability t, GameController controller)
+    public void SetTarget(HasDurability initialTarget, GameController controller)
     {
-        target = t;
+        target = initialTarget;
         gameController = controller;
-        blockingDoor = null;
-        // Keep the agent moving to the target edge; Enemy handles contact and door reach.
         agent.stoppingDistance = 0f;
-        UpdateDestination();
+
+        if (agent.enabled && agent.isOnNavMesh)
+        {
+            SelectTarget();
+            UpdateDestination();
+        }
     }
 
     public void RefreshDestination()
     {
         destinationTarget = null;
+        if (!agent.enabled || !agent.isOnNavMesh)
+            return;
+
+        SelectTarget();
         UpdateDestination();
+    }
+
+    private void SelectTarget()
+    {
+        if (gameController == null)
+            return;
+
+        if (target is Tombstone currentTombstone && currentTombstone.GetCurrentDurability() > 0 &&
+            TryGetReachableTombstonePoint(currentTombstone, out desiredPosition))
+            return;
+
+        Tombstone nearestTombstone = null;
+        Vector3 nearestPoint = default;
+        float nearestDistance = float.PositiveInfinity;
+        foreach (Tombstone tombstone in gameController.TrackedTombstones)
+        {
+            if (tombstone == null || tombstone.GetCurrentDurability() <= 0 ||
+                !TryGetReachableTombstonePoint(tombstone, out Vector3 point))
+                continue;
+
+            float distance = (transform.position - point).sqrMagnitude;
+            if (distance >= nearestDistance)
+                continue;
+
+            nearestTombstone = tombstone;
+            nearestPoint = point;
+            nearestDistance = distance;
+        }
+
+        if (nearestTombstone != null)
+        {
+            target = nearestTombstone;
+            desiredPosition = nearestPoint;
+            return;
+        }
+
+        if ((target is Door currentDoor && currentDoor.IsDefending && currentDoor.AttackCollider != null) ||
+            (target is Wall currentWall && currentWall.IsDefending && currentWall.AttackCollider != null))
+            return;
+
+        SelectClosestDefense();
+    }
+
+    private bool TryGetReachableTombstonePoint(Tombstone tombstone, out Vector3 point)
+    {
+        point = default;
+        if (!NavMesh.SamplePosition(tombstone.transform.position, out NavMeshHit hit,
+                targetSampleDistance, agent.areaMask))
+            return false;
+
+        path.ClearCorners();
+        if (!agent.CalculatePath(hit.position, path) ||
+            path.status != NavMeshPathStatus.PathComplete)
+            return false;
+
+        point = hit.position;
+        return true;
+    }
+
+    private void SelectClosestDefense()
+    {
+        HasDurability nearestDefense = null;
+        Collider nearestCollider = null;
+        float nearestDistance = float.PositiveInfinity;
+
+        foreach (Door door in gameController.ConfiguredDoors)
+        {
+            if (door == null || !door.IsDefending || door.AttackCollider == null)
+                continue;
+
+            float distance = (transform.position - door.AttackCollider.ClosestPoint(transform.position)).sqrMagnitude;
+            if (distance >= nearestDistance)
+                continue;
+
+            nearestDefense = door;
+            nearestCollider = door.AttackCollider;
+            nearestDistance = distance;
+        }
+
+        foreach (Wall wall in gameController.ConfiguredWalls)
+        {
+            if (wall == null || !wall.IsDefending || wall.AttackCollider == null)
+                continue;
+
+            float distance = (transform.position - wall.AttackCollider.ClosestPoint(transform.position)).sqrMagnitude;
+            if (distance >= nearestDistance)
+                continue;
+
+            nearestDefense = wall;
+            nearestCollider = wall.AttackCollider;
+            nearestDistance = distance;
+        }
+
+        target = nearestDefense;
+        if (nearestCollider == null)
+            return;
+
+        Vector3 approachPoint = nearestCollider.ClosestPoint(transform.position);
+        desiredPosition = NavMesh.SamplePosition(approachPoint, out NavMeshHit hit,
+            targetSampleDistance, agent.areaMask) ? hit.position : approachPoint;
     }
 
     private void UpdateDestination()
     {
-        if (!agent.enabled || !agent.isOnNavMesh)
-            return;
-
         if (target == null)
         {
             if (destinationTarget != null)
@@ -78,52 +170,14 @@ public class EnemyPathfinding : MonoBehaviour
             return;
         }
 
-        Vector3 position = target.transform.position;
         if (destinationTarget == target &&
-            (position - destinationPosition).sqrMagnitude < 0.01f)
+            (desiredPosition - destinationPosition).sqrMagnitude < 0.01f)
             return;
 
-        if (agent.SetDestination(position))
+        if (agent.SetDestination(desiredPosition))
         {
             destinationTarget = target;
-            destinationPosition = position;
+            destinationPosition = desiredPosition;
         }
-    }
-
-    private void FindBlockingDoor()
-    {
-        if (gameController == null)
-            return;
-
-        path.ClearCorners();
-        bool hasPath = agent.CalculatePath(target.transform.position, path);
-        if (hasPath && path.status == NavMeshPathStatus.PathComplete)
-            return;
-
-        Vector3 reachablePoint = transform.position;
-        if (path.corners.Length > 0)
-            reachablePoint = path.corners[path.corners.Length - 1];
-
-        Door nearestDoor = null;
-        float nearestDistance = blockedDoorSearchDistance;
-        foreach (Door door in gameController.ConfiguredDoors)
-        {
-            if (door == null || !door.IsDefending || door.AttackCollider == null)
-                continue;
-
-            float distance = Vector3.Distance(reachablePoint,
-                door.AttackCollider.ClosestPoint(reachablePoint));
-            if (distance >= nearestDistance)
-                continue;
-
-            nearestDoor = door;
-            nearestDistance = distance;
-        }
-
-        if (nearestDoor == null)
-            return;
-
-        blockingDoor = nearestDoor;
-        target = nearestDoor;
     }
 }
