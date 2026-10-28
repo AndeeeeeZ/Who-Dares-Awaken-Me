@@ -70,6 +70,12 @@ public class PlayerMovement : MonoBehaviour
         input.Player.Move.performed -= OnMovePerformed;
         input.Player.Move.canceled -= OnMoveCanceled;
         input.Player.Jump.performed -= OnJump;
+
+        xMovement = 0f;
+        zMovement = 0f;
+        pendingRotation = 0f;
+        if (soundEffectPlayer != null)
+            soundEffectPlayer.StopPlaying();
     }
 
     private void OnMovePerformed(InputAction.CallbackContext context)

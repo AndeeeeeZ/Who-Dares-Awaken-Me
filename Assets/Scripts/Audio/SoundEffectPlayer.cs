@@ -37,7 +37,8 @@ public class SoundEffectPlayer : MonoBehaviour
     public void StopPlaying()
     {
         playing = false;
-        audioSource.Stop(); 
+        if (audioSource != null)
+            audioSource.Stop();
     }
 
 

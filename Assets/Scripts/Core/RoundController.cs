@@ -18,6 +18,8 @@ public class RoundController : MonoBehaviour
     [SerializeField] private EnemySpawner smallEnemySpawner;
     [SerializeField] private EnemySpawner legEnemySpawner;
     [SerializeField] private PlayerInteract playerInteract;
+    [SerializeField] private PlayerMovement playerMovement;
+    [SerializeField] private CameraMovement cameraMovement;
 
     [Header("Enemy Spawning")]
     [SerializeField, Min(0.01f)] private float smallEnemySpawnInterval = 5f;
@@ -59,11 +61,12 @@ public class RoundController : MonoBehaviour
     {
         if (gameController == null || gameController.TotalTombstones == 0 ||
             smallEnemySpawner == null || legEnemySpawner == null ||
-            playerInteract == null || smallEnemySpawner == legEnemySpawner ||
+            playerInteract == null || playerMovement == null || cameraMovement == null ||
+            smallEnemySpawner == legEnemySpawner ||
             maxSimultaneousEnemies < 1 ||
             !smallEnemySpawner.IsConfigured || !legEnemySpawner.IsConfigured)
         {
-            Debug.LogError("Game controller needs tombstones, PlayerInteract, and two configured enemy spawners.", this);
+            Debug.LogError("Game controller needs tombstones, player interaction, movement, camera movement, and two configured enemy spawners.", this);
             enabled = false;
         }
     }
@@ -160,8 +163,17 @@ public class RoundController : MonoBehaviour
 
     private void WinGame()
     {
+        if (playerMovement == null || cameraMovement == null)
+        {
+            Debug.LogError("RoundController needs PlayerMovement and CameraMovement assigned.", this);
+            enabled = false;
+            return;
+        }
+
         State = GameState.Victory;
         playerInteract.enabled = false;
+        playerMovement.enabled = false;
+        cameraMovement.enabled = false;
         timeScaleBeforeResult = Time.timeScale;
         pausedForResult = true;
         Time.timeScale = 0f;
