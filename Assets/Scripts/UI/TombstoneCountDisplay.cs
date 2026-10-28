@@ -4,7 +4,12 @@ using UnityEngine;
 public class TombstoneCountDisplay : MonoBehaviour
 {
     [SerializeField] private GameController gameController;
-    [SerializeField] private UnityEngine.UI.Image[] icons;
+    [SerializeField] private TombstoneCountIcon[] icons;
+    [SerializeField] private Sprite completeIcon;
+    [SerializeField] private Sprite brokenIcon;
+    [SerializeField] private Sprite completeOutline;
+    [SerializeField] private Sprite brokenOutline;
+    [SerializeField, Range(0f, 100f)] private float completeIconThresholdPercent = 50f;
     [SerializeField] private Color emptyColor = Color.red;
     [SerializeField] private Color fullColor = Color.green;
 
@@ -14,7 +19,7 @@ public class TombstoneCountDisplay : MonoBehaviour
     {
         if (gameController == null || icons == null)
         {
-            Debug.LogError("TombstoneCountDisplay needs a GameController and an array of UI Images.", this);
+            Debug.LogError("TombstoneCountDisplay needs a GameController and an array of tombstone count icons.", this);
             return;
         }
 
@@ -48,17 +53,24 @@ public class TombstoneCountDisplay : MonoBehaviour
 
         for (int i = 0; i < icons.Length; i++)
         {
-            UnityEngine.UI.Image icon = icons[i];
-            if (icon == null)
+            TombstoneCountIcon icon = icons[i];
+            if (icon == null || !icon.IsAssigned)
             {
-                Debug.LogError($"TombstoneCountDisplay icon {i} is unassigned.", this);
+                Debug.LogError($"TombstoneCountDisplay icon {i} needs both outline and sprite Images assigned.", this);
                 continue;
             }
 
             bool used = i < sortedTombstones.Count;
             icon.gameObject.SetActive(used);
-            if (used)
-                icon.color = Color.Lerp(emptyColor, fullColor, Health(sortedTombstones[i]));
+            if (!used)
+                continue;
+
+            float health = Health(sortedTombstones[i]);
+            bool complete = health * 100f >= completeIconThresholdPercent;
+            icon.SetAppearance(
+                complete ? completeOutline : brokenOutline,
+                complete ? completeIcon : brokenIcon,
+                Color.Lerp(emptyColor, fullColor, health));
         }
     }
 
