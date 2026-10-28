@@ -26,6 +26,12 @@ public class MinimapDisplay : MonoBehaviour
     [SerializeField] private GameController gameController;
     [SerializeField] private RoundController roundController;
 
+    [Header("Production spots")]
+    [SerializeField] private ProductionSpot woodProductionSpot;
+    [SerializeField] private Transform woodMarkerPosition;
+    [SerializeField] private ProductionSpot chainProductionSpot;
+    [SerializeField] private Transform chainMarkerPosition;
+
     [Header("Marker appearance")]
     [SerializeField] private Image markerPrefab;
     [SerializeField] private Sprite tombstoneIcon;
@@ -34,6 +40,8 @@ public class MinimapDisplay : MonoBehaviour
     [SerializeField] private Sprite doorIcon;
     [SerializeField] private Sprite wallIcon;
     [SerializeField] private Sprite enemyIcon;
+    [SerializeField] private Sprite woodProductionIcon;
+    [SerializeField] private Sprite chainProductionIcon;
     [SerializeField] private Color healthyColor = Color.green;
     [SerializeField] private Color damagedColor = Color.red;
     [SerializeField] private Color brokenColor = Color.gray;
@@ -51,6 +59,8 @@ public class MinimapDisplay : MonoBehaviour
     private readonly List<TombstoneMarker> tombstoneMarkers = new List<TombstoneMarker>();
     private readonly List<DefenseMarker> defenseMarkers = new List<DefenseMarker>();
     private readonly Dictionary<Enemy, Image> enemyMarkers = new Dictionary<Enemy, Image>();
+    private Image woodProductionMarker;
+    private Image chainProductionMarker;
     private bool hasStarted;
 
     private void OnEnable()
@@ -98,6 +108,8 @@ public class MinimapDisplay : MonoBehaviour
         }
 
         BuildStaticMarkers();
+        woodProductionMarker = CreateProductionMarker(woodProductionSpot, woodMarkerPosition, woodProductionIcon, "wood");
+        chainProductionMarker = CreateProductionMarker(chainProductionSpot, chainMarkerPosition, chainProductionIcon, "chain");
 
         roundController.EnemySpawned += AddEnemy;
         roundController.EnemyRemoved += RemoveEnemy;
@@ -128,6 +140,11 @@ public class MinimapDisplay : MonoBehaviour
         foreach (Image marker in enemyMarkers.Values)
             DestroyMarker(marker);
         enemyMarkers.Clear();
+
+        DestroyMarker(woodProductionMarker);
+        DestroyMarker(chainProductionMarker);
+        woodProductionMarker = null;
+        chainProductionMarker = null;
     }
 
     private void LateUpdate()
@@ -182,6 +199,37 @@ public class MinimapDisplay : MonoBehaviour
             if (marker.Key != null)
                 PlaceMarker(marker.Value.rectTransform, marker.Key.transform.position);
         }
+
+        UpdateProductionMarker(woodProductionMarker, woodProductionSpot, woodMarkerPosition);
+        UpdateProductionMarker(chainProductionMarker, chainProductionSpot, chainMarkerPosition);
+    }
+
+    private Image CreateProductionMarker(ProductionSpot spot, Transform position, Sprite icon, string resource)
+    {
+        if (spot == null && position == null)
+            return null;
+
+        if (spot == null || position == null)
+        {
+            Debug.LogWarning($"MinimapDisplay needs both the {resource} production spot and marker position assigned.", this);
+            return null;
+        }
+
+        return CreateMarker(icon);
+    }
+
+    private void UpdateProductionMarker(Image marker, ProductionSpot spot, Transform position)
+    {
+        if (marker == null)
+            return;
+
+        if (spot == null || position == null || !spot.gameObject.activeInHierarchy)
+        {
+            marker.gameObject.SetActive(false);
+            return;
+        }
+
+        PlaceMarker(marker.rectTransform, position.position);
     }
 
     private void BuildStaticMarkers()
