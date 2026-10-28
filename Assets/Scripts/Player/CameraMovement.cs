@@ -55,7 +55,7 @@ public class CameraMovement : MonoBehaviour
         float rotationThisFrame = keyboardLookDegreesPerSecond * Time.deltaTime;
 
         xCameraRotation -= lookDirection.y * rotationThisFrame;
-        xCameraRotation = Mathf.Clamp(xCameraRotation, -80f, 80f);
+        xCameraRotation = Mathf.Clamp(xCameraRotation, -30f, 30f);
 
         float yRotationDelta = lookDirection.x * rotationThisFrame;
         yCameraRotation += yRotationDelta;

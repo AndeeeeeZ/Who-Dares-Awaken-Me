@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 // The class name is retained because GameScene and its buttons reference this component.
 public class RoundController : MonoBehaviour
 {
+    private const float ResultInputDelaySeconds = 1f;
+
     public enum GameState
     {
         WaitingToStart,
@@ -32,6 +34,7 @@ public class RoundController : MonoBehaviour
     private float legSpawnTimer;
     private float playStartTime;
     private float winElapsedTime;
+    private float resultInputUnlockTime;
     private float timeScaleBeforeResult;
     private bool pausedForResult;
 
@@ -178,6 +181,7 @@ public class RoundController : MonoBehaviour
 
         winElapsedTime = State == GameState.Playing ? Time.time - playStartTime : 0f;
         BestTimeRecord.Record(winElapsedTime);
+        resultInputUnlockTime = Time.unscaledTime + ResultInputDelaySeconds;
         State = GameState.Victory;
         playerInteract.enabled = false;
         playerMovement.enabled = false;
@@ -192,12 +196,18 @@ public class RoundController : MonoBehaviour
 
     public void RestartGame()
     {
+        if (State == GameState.Victory && Time.unscaledTime < resultInputUnlockTime)
+            return;
+
         RestoreTimeScale();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
     }
 
     public void ReturnToTitle()
     {
+        if (State == GameState.Victory && Time.unscaledTime < resultInputUnlockTime)
+            return;
+
         if (string.IsNullOrWhiteSpace(titleSceneName) ||
             !Application.CanStreamedLevelBeLoaded(titleSceneName))
         {
