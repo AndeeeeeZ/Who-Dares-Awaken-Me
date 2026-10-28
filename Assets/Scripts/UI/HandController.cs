@@ -13,9 +13,11 @@ public class HandController : MonoBehaviour
     [SerializeField] private Image rightHoldBoard;
     [SerializeField] private Image rightHoldHammer;
     [SerializeField] private Image rightHoldHammerDown;
+    [SerializeField, Min(0f)] private float hammerDownMinDuration = 0.1f;
     [SerializeField] private TextMeshProUGUI promptText;
 
     private bool hammerDown;
+    private float hammerDownUntil;
 
     private void OnEnable()
     {
@@ -30,12 +32,14 @@ public class HandController : MonoBehaviour
         }
 
         hammerDown = false;
+        hammerDownUntil = 0f;
         SetVisible(rightHoldHammerDown, false);
     }
 
     private void OnDisable()
     {
         hammerDown = false;
+        hammerDownUntil = 0f;
         if (rightHoldHammerDown != null)
             SetVisible(rightHoldHammerDown, false);
     }
@@ -55,10 +59,15 @@ public class HandController : MonoBehaviour
         bool showHands = !showTwoHandHold;
         bool showHammer = target != null && !aimingAtWall && !(target is Item) && !(target is Door);
 
-        if (!showHammer || !playerInteract.IsInteractHeld)
+        if (!showHammer)
             hammerDown = false;
         else if (playerInteract.WasInteractPressedThisFrame)
+        {
             hammerDown = true;
+            hammerDownUntil = Time.unscaledTime + hammerDownMinDuration;
+        }
+        else if (!playerInteract.IsInteractHeld && Time.unscaledTime >= hammerDownUntil)
+            hammerDown = false;
 
         SetVisible(center, showTwoHandHold);
         SetVisible(leftHoldBar, showHands && holdingBar);

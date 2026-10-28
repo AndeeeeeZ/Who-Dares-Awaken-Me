@@ -33070,6 +33070,7 @@ MonoBehaviour:
   rightHoldBoard: {fileID: 1085782292}
   rightHoldHammer: {fileID: 1816955497}
   rightHoldHammerDown: {fileID: 616529387}
+  hammerDownMinDuration: 0.1
   promptText: {fileID: 1546055549}
 --- !u!1 &1571504600
 GameObject:
