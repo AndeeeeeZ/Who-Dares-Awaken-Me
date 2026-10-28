@@ -37,6 +37,13 @@ public class ProductionSpot : MonoBehaviour, IInteractable
         timer = 0f;
         currentAmount = 0;
         startProducing = false; 
+
+        if (autoProduce)
+        {
+            autoProduceEffectPlayer.PreloadAudioData();
+            if (clickToBoost)
+                clickEffectPlayer.PreloadAudioData();
+        }
     }
 
     public void Interact()

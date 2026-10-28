@@ -47,6 +47,12 @@ public class SoundEffectPlayer : MonoBehaviour
         audioSource.PlayOneShot(audioClip);
     }
 
+    public void PreloadAudioData()
+    {
+        if (audioClip != null)
+            audioClip.LoadAudioData();
+    }
+
     private void Update()
     {
         if (playing)

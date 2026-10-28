@@ -3,6 +3,10 @@ using UnityEngine.InputSystem;
 
 public class CameraMovement : MonoBehaviour
 {
+    // Mouse delta is already the movement accumulated over this frame. Keep the
+    // existing Inspector sensitivity close to its former feel at 60 FPS.
+    private const float MouseSensitivityScale = 1f / 60f;
+
     [SerializeField]
     private Transform playerTransform;
 
@@ -53,10 +57,10 @@ public class CameraMovement : MonoBehaviour
 
         Vector2 mouseDelta = lookAction.ReadValue<Vector2>();
 
-        xCameraRotation -= mouseDelta.y * rotationSpeed * Time.deltaTime;
+        xCameraRotation -= mouseDelta.y * rotationSpeed * MouseSensitivityScale;
         xCameraRotation = Mathf.Clamp(xCameraRotation, -80f, 80f);
 
-        float yRotationDelta = mouseDelta.x * rotationSpeed * Time.deltaTime;
+        float yRotationDelta = mouseDelta.x * rotationSpeed * MouseSensitivityScale;
         yCameraRotation += yRotationDelta;
 
         cameraTransform.eulerAngles = new Vector3(xCameraRotation, yCameraRotation, 0f);
