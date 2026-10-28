@@ -143,6 +143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyPathfinding
   intervalPerCheckTarget: 1
+  targetSampleDistance: 8
 --- !u!114 &2525285328126025759
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,6 +170,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 1386177591149057472}
   pushbackForce: 5
   pushUpForce: 7
+  defenseAttackReach: 3
 --- !u!114 &4038708296409667259
 MonoBehaviour:
   m_ObjectHideFlags: 0
