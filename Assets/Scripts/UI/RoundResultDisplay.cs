@@ -4,36 +4,33 @@ public class RoundResultDisplay : MonoBehaviour
 {
     [SerializeField] private RoundController roundController;
     [SerializeField] private GameObject victoryPanel;
-    [SerializeField] private GameObject defeatPanel;
 
     private void OnEnable()
     {
-        if (roundController == null || victoryPanel == null || defeatPanel == null ||
-            victoryPanel == defeatPanel)
+        if (roundController == null || victoryPanel == null)
         {
-            Debug.LogError("RoundResultDisplay needs a RoundController and separate victory and defeat panels.", this);
+            Debug.LogError("RoundResultDisplay needs a RoundController and victory panel.", this);
             enabled = false;
             return;
         }
 
-        roundController.PhaseChanged += OnPhaseChanged;
+        roundController.StateChanged += OnStateChanged;
         RefreshPanels();
     }
 
     private void OnDisable()
     {
         if (roundController != null)
-            roundController.PhaseChanged -= OnPhaseChanged;
+            roundController.StateChanged -= OnStateChanged;
     }
 
-    private void OnPhaseChanged(RoundController.RoundPhase phase, int wave)
+    private void OnStateChanged(RoundController.GameState state)
     {
         RefreshPanels();
     }
 
     private void RefreshPanels()
     {
-        victoryPanel.SetActive(roundController.Phase == RoundController.RoundPhase.Victory);
-        defeatPanel.SetActive(roundController.Phase == RoundController.RoundPhase.Defeat);
+        victoryPanel.SetActive(roundController.State == RoundController.GameState.Victory);
     }
 }

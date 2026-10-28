@@ -3,10 +3,8 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private GameObject enemyPrefab;
-    [SerializeField, Min(0.01f)] private float spawnInterval = 1f;
     [SerializeField] private Transform[] spawnPoints;
 
-    public float SpawnInterval => Mathf.Max(0.01f, spawnInterval);
     public bool IsConfigured => enemyPrefab != null && enemyPrefab.GetComponent<Enemy>() != null &&
                                 spawnPoints != null && spawnPoints.Length > 0 &&
                                 HasOnlyAssignedSpawnPoints();

@@ -273,7 +273,8 @@ public class MinimapDisplay : MonoBehaviour
                 continue;
 
             int durability = tombstone.GetCurrentDurability();
-            if (durability < marker.LastDurability && roundController.CurrentWave > 0)
+            if (durability < marker.LastDurability &&
+                roundController.State == RoundController.GameState.Playing)
                 marker.DamageFlashUntil = Time.unscaledTime + damageFlashDuration;
             marker.LastDurability = durability;
             return;

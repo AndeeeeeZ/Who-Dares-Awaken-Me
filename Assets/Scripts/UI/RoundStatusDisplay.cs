@@ -6,21 +6,21 @@ public class RoundStatusDisplay : MonoBehaviour
     [SerializeField] private TMPro.TextMeshProUGUI preparationTimeText;
     [SerializeField] private TMPro.TextMeshProUGUI remainingEnemiesText;
 
-    private int displayedSeconds = -1;
-
     private void OnEnable()
     {
         if (roundController == null || preparationTimeText == null || remainingEnemiesText == null)
         {
-            Debug.LogError("RoundStatusDisplay needs a RoundController and two TextMeshProUGUI labels.", this);
+            Debug.LogError("RoundStatusDisplay needs the game controller and two TextMeshProUGUI labels.", this);
             enabled = false;
             return;
         }
 
-        roundController.PhaseChanged += OnPhaseChanged;
-        roundController.PreparationTimeChanged += UpdatePreparationTime;
-        roundController.RemainingEnemiesChanged += UpdateRemainingEnemies;
-        RefreshDisplay();
+        roundController.RepairProgressChanged += UpdateRepairProgress;
+        roundController.AliveEnemiesChanged += UpdateAliveEnemies;
+        preparationTimeText.enabled = true;
+        remainingEnemiesText.enabled = true;
+        UpdateRepairProgress(roundController.FullyRepairedTombstones, roundController.TotalTombstones);
+        UpdateAliveEnemies(roundController.AliveEnemies);
     }
 
     private void OnDisable()
@@ -28,49 +28,17 @@ public class RoundStatusDisplay : MonoBehaviour
         if (roundController == null)
             return;
 
-        roundController.PhaseChanged -= OnPhaseChanged;
-        roundController.PreparationTimeChanged -= UpdatePreparationTime;
-        roundController.RemainingEnemiesChanged -= UpdateRemainingEnemies;
+        roundController.RepairProgressChanged -= UpdateRepairProgress;
+        roundController.AliveEnemiesChanged -= UpdateAliveEnemies;
     }
 
-    private void OnPhaseChanged(RoundController.RoundPhase phase, int wave)
+    private void UpdateRepairProgress(int repaired, int total)
     {
-        RefreshDisplay();
+        preparationTimeText.text = $"Fully repaired: {repaired}/{total}";
     }
 
-    private void RefreshDisplay()
+    private void UpdateAliveEnemies(int alive)
     {
-        bool preparing = roundController.Phase == RoundController.RoundPhase.Preparation;
-        bool inWave = roundController.Phase == RoundController.RoundPhase.Wave;
-
-        preparationTimeText.enabled = preparing;
-        remainingEnemiesText.enabled = inWave;
-
-        if (preparing)
-        {
-            displayedSeconds = -1;
-            UpdatePreparationTime(roundController.PreparationTimeRemaining);
-        }
-
-        if (inWave)
-            UpdateRemainingEnemies(roundController.RemainingEnemies);
-    }
-
-    private void UpdatePreparationTime(float remainingTime)
-    {
-        if (roundController.Phase != RoundController.RoundPhase.Preparation)
-            return;
-
-        int seconds = Mathf.CeilToInt(Mathf.Max(0f, remainingTime));
-        if (seconds == displayedSeconds)
-            return;
-
-        displayedSeconds = seconds;
-        preparationTimeText.text = $"Preparation: {seconds / 60}:{seconds % 60:00}";
-    }
-
-    private void UpdateRemainingEnemies(int remaining)
-    {
-        remainingEnemiesText.text = $"Enemies remaining: {remaining}";
+        remainingEnemiesText.text = $"Enemies active: {alive}";
     }
 }

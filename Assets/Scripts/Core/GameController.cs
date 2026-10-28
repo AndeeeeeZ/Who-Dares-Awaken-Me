@@ -27,11 +27,13 @@ public class GameController : MonoBehaviour
 
     public int TotalTombstones => trackedTombstones.Count;
     public int StandingTombstones { get; private set; }
+    public int FullyRepairedTombstones { get; private set; }
     public bool TombstonesInitialized { get; private set; }
     public IReadOnlyList<Tombstone> TrackedTombstones => trackedTombstones;
     public IReadOnlyList<Door> ConfiguredDoors => Doors ?? Array.Empty<Door>();
     public IReadOnlyList<Wall> ConfiguredWalls => Walls ?? Array.Empty<Wall>();
     public event Action<int, int> TombstoneCountChanged;
+    public event Action<int, int, int> TombstoneProgressChanged;
 
     private void Awake()
     {
@@ -136,7 +138,7 @@ public class GameController : MonoBehaviour
         if (total == 0)
             return;
 
-        int brokenCount = Mathf.Clamp(startingBrokenTombstones, 0, total - 1);
+        int brokenCount = Mathf.Clamp(startingBrokenTombstones, 0, total);
         int minimum = Mathf.Max(1, Mathf.Min(minimumStartingDurability, maximumStartingDurability));
         int maximum = Mathf.Max(minimum, Mathf.Max(minimumStartingDurability, maximumStartingDurability));
 
@@ -167,17 +169,28 @@ public class GameController : MonoBehaviour
     private void RefreshTombstoneCount()
     {
         int standing = 0;
+        int fullyRepaired = 0;
         foreach (Tombstone tombstone in trackedTombstones)
         {
-            if (tombstone != null && tombstone.GetCurrentDurability() > 0)
+            if (tombstone == null)
+                continue;
+
+            int durability = tombstone.GetCurrentDurability();
+            if (durability > 0)
                 standing++;
+            if (tombstone.MaxDurability > 0 && durability >= tombstone.MaxDurability)
+                fullyRepaired++;
         }
 
-        if (StandingTombstones == standing)
+        if (StandingTombstones == standing && FullyRepairedTombstones == fullyRepaired)
             return;
 
+        bool standingChanged = StandingTombstones != standing;
         StandingTombstones = standing;
-        TombstoneCountChanged?.Invoke(StandingTombstones, TotalTombstones);
+        FullyRepairedTombstones = fullyRepaired;
+        if (standingChanged)
+            TombstoneCountChanged?.Invoke(StandingTombstones, TotalTombstones);
+        TombstoneProgressChanged?.Invoke(StandingTombstones, FullyRepairedTombstones, TotalTombstones);
     }
 
     public HasDurability GetEnemyTarget()
