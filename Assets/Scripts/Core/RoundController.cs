@@ -30,6 +30,8 @@ public class RoundController : MonoBehaviour
     private readonly HashSet<Enemy> activeEnemies = new HashSet<Enemy>();
     private float smallSpawnTimer;
     private float legSpawnTimer;
+    private float playStartTime;
+    private float winElapsedTime;
     private float timeScaleBeforeResult;
     private bool pausedForResult;
 
@@ -38,6 +40,9 @@ public class RoundController : MonoBehaviour
     public int TotalTombstones => gameController != null ? gameController.TotalTombstones : 0;
     public int AliveEnemies => activeEnemies.Count;
     public IReadOnlyCollection<Enemy> ActiveEnemies => activeEnemies;
+    public float ElapsedPlayTime => State == GameState.Playing
+        ? Time.time - playStartTime
+        : winElapsedTime;
 
     public event Action<GameState> StateChanged;
     public event Action<int, int> RepairProgressChanged;
@@ -100,6 +105,7 @@ public class RoundController : MonoBehaviour
             if (State != GameState.WaitingToStart)
                 return;
 
+            playStartTime = Time.time;
             State = GameState.Playing;
             StateChanged?.Invoke(State);
         }
@@ -170,6 +176,8 @@ public class RoundController : MonoBehaviour
             return;
         }
 
+        winElapsedTime = State == GameState.Playing ? Time.time - playStartTime : 0f;
+        BestTimeRecord.Record(winElapsedTime);
         State = GameState.Victory;
         playerInteract.enabled = false;
         playerMovement.enabled = false;
