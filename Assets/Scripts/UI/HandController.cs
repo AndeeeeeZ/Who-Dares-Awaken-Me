@@ -12,17 +12,32 @@ public class HandController : MonoBehaviour
     [SerializeField] private Image leftHoldBar;
     [SerializeField] private Image rightHoldBoard;
     [SerializeField] private Image rightHoldHammer;
+    [SerializeField] private Image rightHoldHammerDown;
     [SerializeField] private TextMeshProUGUI promptText;
+
+    private bool hammerDown;
 
     private void OnEnable()
     {
         if (playerInteract == null || gameController == null || leftHand == null || rightHand == null ||
             center == null || leftHoldBar == null || rightHoldBoard == null || rightHoldHammer == null ||
+            rightHoldHammerDown == null ||
             promptText == null)
         {
             Debug.LogError("HandController has missing Inspector references.", this);
             enabled = false;
+            return;
         }
+
+        hammerDown = false;
+        SetVisible(rightHoldHammerDown, false);
+    }
+
+    private void OnDisable()
+    {
+        hammerDown = false;
+        if (rightHoldHammerDown != null)
+            SetVisible(rightHoldHammerDown, false);
     }
 
     private void LateUpdate()
@@ -40,10 +55,16 @@ public class HandController : MonoBehaviour
         bool showHands = !showTwoHandHold;
         bool showHammer = target != null && !aimingAtWall && !(target is Item) && !(target is Door);
 
+        if (!showHammer || !playerInteract.IsInteractHeld)
+            hammerDown = false;
+        else if (playerInteract.WasInteractPressedThisFrame)
+            hammerDown = true;
+
         SetVisible(center, showTwoHandHold);
         SetVisible(leftHoldBar, showHands && holdingBar);
         SetVisible(leftHand, showHands && !holdingBar);
-        SetVisible(rightHoldHammer, showHammer);
+        SetVisible(rightHoldHammer, showHammer && !hammerDown);
+        SetVisible(rightHoldHammerDown, hammerDown);
         SetVisible(rightHoldBoard, showHands && !showHammer && holdingBoard);
         SetVisible(rightHand, showHands && !showHammer && !holdingBoard);
     }

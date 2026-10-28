@@ -12222,17 +12222,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 616529384}
-  m_LocalRotation: {x: -0.013819541, y: -0.0057863663, z: 0.1573598, w: 0.9874277}
-  m_LocalPosition: {x: 0, y: 0, z: 2}
+  m_LocalRotation: {x: -0, y: -0, z: 0.06481961, w: 0.997897}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1571274699}
-  m_LocalEulerAnglesHint: {x: -1.46, y: -0.904, z: 18.121}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 7.433}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 70, y: -145}
-  m_SizeDelta: {x: 500, y: 250}
+  m_AnchoredPosition: {x: 40, y: -96}
+  m_SizeDelta: {x: 536.761, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &616529386
 Animator:
@@ -33069,6 +33069,7 @@ MonoBehaviour:
   leftHoldBar: {fileID: 1281637225}
   rightHoldBoard: {fileID: 1085782292}
   rightHoldHammer: {fileID: 1816955497}
+  rightHoldHammerDown: {fileID: 616529387}
   promptText: {fileID: 1546055549}
 --- !u!1 &1571504600
 GameObject:

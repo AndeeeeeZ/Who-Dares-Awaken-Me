@@ -12,6 +12,8 @@ public class PlayerInteract : MonoBehaviour
     private float raycastDistance;
     private InputActions input;
     public IInteractable CurrentTarget { get; private set; }
+    public bool IsInteractHeld => isActiveAndEnabled && input.Player.Interact.IsPressed();
+    public bool WasInteractPressedThisFrame => isActiveAndEnabled && input.Player.Interact.WasPressedThisFrame();
 
     private void Awake()
     {
