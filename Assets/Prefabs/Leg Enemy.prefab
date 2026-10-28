@@ -75,6 +75,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyPathfinding
   intervalPerCheckTarget: 1
+  targetSampleDistance: 8
 --- !u!65 &783958324808455040
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -165,8 +166,9 @@ MonoBehaviour:
   haveExplosionEffect: 0
   hurtColor: {r: 1, g: 0, b: 0, a: 1}
   spriteRenderer: {fileID: 4281802596559614447}
-  pushbackForce: 10
-  pushUpForce: 4
+  pushbackForce: 6
+  pushUpForce: 5
+  defenseAttackReach: 2
 --- !u!114 &-5131370520411995133
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -32655,12 +32655,12 @@ MonoBehaviour:
   maxSimultaneousEnemies: 8
   titleSceneName: Title
   waves:
-  - smallEnemies: 5
+  - smallEnemies: 10
     legEnemies: 0
-  - smallEnemies: 5
-    legEnemies: 1
-  - smallEnemies: 6
+  - smallEnemies: 10
     legEnemies: 2
+  - smallEnemies: 15
+    legEnemies: 5
 --- !u!4 &1657323097
 Transform:
   m_ObjectHideFlags: 0
@@ -38815,7 +38815,7 @@ MonoBehaviour:
   attackCollider: {fileID: 0}
   isBroken: 1
   fixInterval: 0.2
-  amountFixedPerInterval: 1
+  amountFixedPerInterval: 3
   amountPerClick: 0
   isHolding: 0
   boardPlaced: 0
