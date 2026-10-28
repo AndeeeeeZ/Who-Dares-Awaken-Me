@@ -60,8 +60,10 @@ public class Tombstone : HasDurability, IInteractable
 
     public void Interact()
     {
+        bool needsRepair = GetCurrentDurability() < MaxDurability;
         AddCurrentDurability(fixPerInteraction);
-        particle.Play();
+        if (needsRepair)
+            particle.Play();
         soundEffectPlayer.PlayOneShot(); 
     }
 
