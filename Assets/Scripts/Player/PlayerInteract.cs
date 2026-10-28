@@ -22,17 +22,22 @@ public class PlayerInteract : MonoBehaviour
 
     private void OnEnable()
     {
-        input.Enable();
+        input.Player.Enable();
         input.Player.Interact.performed += OnInteractPerformed;
         input.Player.Grab.performed += OnInteractPerformed;
     }
 
     private void OnDisable()
     {
-        input.Disable();
+        input.Player.Disable();
         input.Player.Interact.performed -= OnInteractPerformed;
         input.Player.Grab.performed -= OnInteractPerformed;
         CurrentTarget = null;
+    }
+
+    private void OnDestroy()
+    {
+        input.Dispose();
     }
 
     private void Update()

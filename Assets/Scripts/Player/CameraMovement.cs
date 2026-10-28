@@ -3,15 +3,11 @@ using UnityEngine.InputSystem;
 
 public class CameraMovement : MonoBehaviour
 {
-    // Mouse delta is already the movement accumulated over this frame. Keep the
-    // existing Inspector sensitivity close to its former feel at 60 FPS.
-    private const float MouseSensitivityScale = 1f / 60f;
-
     [SerializeField]
     private Transform playerTransform;
 
-    [SerializeField]
-    private float rotationSpeed;
+    [SerializeField, Min(0f)]
+    private float keyboardLookDegreesPerSecond = 120f;
 
     [SerializeField]
     private Vector3 cameraOffset;
@@ -55,12 +51,13 @@ public class CameraMovement : MonoBehaviour
 
         cameraTransform.position = playerTransform.position + cameraOffset;
 
-        Vector2 mouseDelta = lookAction.ReadValue<Vector2>();
+        Vector2 lookDirection = lookAction.ReadValue<Vector2>();
+        float rotationThisFrame = keyboardLookDegreesPerSecond * Time.deltaTime;
 
-        xCameraRotation -= mouseDelta.y * rotationSpeed * MouseSensitivityScale;
+        xCameraRotation -= lookDirection.y * rotationThisFrame;
         xCameraRotation = Mathf.Clamp(xCameraRotation, -80f, 80f);
 
-        float yRotationDelta = mouseDelta.x * rotationSpeed * MouseSensitivityScale;
+        float yRotationDelta = lookDirection.x * rotationThisFrame;
         yCameraRotation += yRotationDelta;
 
         cameraTransform.eulerAngles = new Vector3(xCameraRotation, yCameraRotation, 0f);
@@ -70,11 +67,16 @@ public class CameraMovement : MonoBehaviour
 
     private void OnEnable()
     {
-        input.Enable();
+        input.Player.Enable();
     }
 
     private void OnDisable()
     {
-        input.Disable();
+        input.Player.Disable();
+    }
+
+    private void OnDestroy()
+    {
+        input.Dispose();
     }
 }

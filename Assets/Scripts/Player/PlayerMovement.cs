@@ -58,7 +58,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnEnable()
     {
-        input.Enable();
+        input.Player.Enable();
         input.Player.Move.performed += OnMovePerformed;
         input.Player.Move.canceled += OnMoveCanceled;
         input.Player.Jump.performed += OnJump;
@@ -66,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnDisable()
     {
-        input.Disable();
+        input.Player.Disable();
         input.Player.Move.performed -= OnMovePerformed;
         input.Player.Move.canceled -= OnMoveCanceled;
         input.Player.Jump.performed -= OnJump;
@@ -76,6 +76,11 @@ public class PlayerMovement : MonoBehaviour
         pendingRotation = 0f;
         if (soundEffectPlayer != null)
             soundEffectPlayer.StopPlaying();
+    }
+
+    private void OnDestroy()
+    {
+        input.Dispose();
     }
 
     private void OnMovePerformed(InputAction.CallbackContext context)
