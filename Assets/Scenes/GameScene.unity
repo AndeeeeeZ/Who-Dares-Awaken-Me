@@ -244,14 +244,16 @@ MonoBehaviour:
   roundController: {fileID: 1657323096}
   markerPrefab: {fileID: 7670222507737981258, guid: b19bcdc1ba782f342b9e85bef989e927, type: 3}
   tombstoneIcon: {fileID: 197642567, guid: 12714fcad9187d243b13118473a0860c, type: 3}
-  doorIcon: {fileID: 0}
-  wallIcon: {fileID: 0}
+  brokenTombstoneIcon: {fileID: 1551609478, guid: 83f3fcf40170cb946861b076791f50a3, type: 3}
+  brokenTombstoneIconThresholdPercent: 75
+  doorIcon: {fileID: -1767968412, guid: 86ef5248b0aac9947b18c439cbedec2c, type: 3}
+  wallIcon: {fileID: -1767968412, guid: 86ef5248b0aac9947b18c439cbedec2c, type: 3}
   enemyIcon: {fileID: 970115060, guid: 9e9b3f03af307e64594fdc11a07e4196, type: 3}
-  healthyColor: {r: 0, g: 1, b: 0, a: 1}
-  damagedColor: {r: 1, g: 0.51692367, b: 0, a: 1}
-  brokenColor: {r: 1, g: 0, b: 0, a: 1}
-  securedColor: {r: 0, g: 1, b: 1, a: 1}
-  unsecuredColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  healthyColor: {r: 1, g: 1, b: 1, a: 1}
+  damagedColor: {r: 1, g: 0.8430078, b: 0.6745283, a: 1}
+  brokenColor: {r: 1, g: 0.504717, b: 0.504717, a: 1}
+  securedColor: {r: 1, g: 1, b: 1, a: 1}
+  unsecuredColor: {r: 1, g: 0.4764151, b: 0.4764151, a: 1}
   enemyColor: {r: 1, g: 1, b: 1, a: 1}
   damageFlashColor: {r: 1, g: 1, b: 1, a: 1}
   attackPulseColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
@@ -1392,8 +1394,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.56, y: 6.192946, z: 8.37}
-  m_Center: {x: 6.82, y: 1, z: 2.9}
+  m_Size: {x: 2.8264763, y: 6.1929455, z: 8.37}
+  m_Center: {x: 7.4532385, y: 1, z: 2.9}
 --- !u!114 &99314342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1415,7 +1417,10 @@ MonoBehaviour:
   durabilityDeclines: 0
   display: {fileID: 0}
   progressBar: {fileID: 1618117485}
-  promptMessage: GET CHAIN TO LOCK DOOR
+  noChainMessage: GET A CHAIN TO LOCK DOOR
+  holdingChainMessage: CLICK TO ATTACH CHAIN
+  chainAttachedMessage: DOOR IS LOCKED
+  gameController: {fileID: 2143591776}
   fixChain: {fileID: 291551129}
   isOpen: 1
   locked: 0
@@ -11928,7 +11933,10 @@ MonoBehaviour:
   durabilityDeclines: 0
   display: {fileID: 0}
   progressBar: {fileID: 558556954}
-  promptMessage: GET CHAIN TO LOCK DOOR
+  noChainMessage: GET A CHAIN TO LOCK DOOR
+  holdingChainMessage: CLICK TO ATTACH CHAIN
+  chainAttachedMessage: DOOR IS LOCKED
+  gameController: {fileID: 2143591776}
   fixChain: {fileID: 126346831}
   isOpen: 1
   locked: 0
@@ -21029,7 +21037,7 @@ MonoBehaviour:
   brokenIcon: {fileID: 1551609478, guid: 83f3fcf40170cb946861b076791f50a3, type: 3}
   completeOutline: {fileID: -582382328, guid: 02320d0cefbd36146bbe20f0e5a7037e, type: 3}
   brokenOutline: {fileID: -630788880, guid: f6f145016c213f64ab5528bf964eeb57, type: 3}
-  completeIconThresholdPercent: 25
+  completeIconThresholdPercent: 75
   emptyColor: {r: 1, g: 0, b: 0, a: 1}
   fullColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &942500283
@@ -31538,7 +31546,10 @@ MonoBehaviour:
   durabilityDeclines: 0
   display: {fileID: 0}
   progressBar: {fileID: 1767786871}
-  promptMessage: GET CHAIN TO LOCK DOOR
+  noChainMessage: GET A CHAIN TO LOCK DOOR
+  holdingChainMessage: CLICK TO ATTACH CHAIN
+  chainAttachedMessage: DOOR IS LOCKED
+  gameController: {fileID: 2143591776}
   fixChain: {fileID: 131135423}
   isOpen: 1
   locked: 0
@@ -41113,7 +41124,11 @@ MonoBehaviour:
   durabilityDeclines: 0
   display: {fileID: 0}
   progressBar: {fileID: 1563089223}
-  promptMessage: HOLD THE WOOD TO SEAL THE HOLE
+  noWoodMessage: GET WOOD TO SEAL THE HOLE
+  holdingWoodMessage: CLICK TO PLACE WOOD
+  aimAtWoodMessage: HOLD THE WOOD TO SEAL THE HOLE
+  woodFinishedMessage: WOOD IS SECURED
+  gameController: {fileID: 2143591776}
   fixBoard: {fileID: 685650028}
   attackCollider: {fileID: 0}
   isBroken: 1

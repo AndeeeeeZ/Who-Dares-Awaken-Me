@@ -1,9 +1,16 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Wall : HasDurability, IInteractable
 {
-    [SerializeField]
-    private string promptMessage;
+    [Header("Interaction Messages")]
+    [SerializeField] private string noWoodMessage = "GET WOOD TO SEAL THE HOLE";
+    [SerializeField] private string holdingWoodMessage = "CLICK TO PLACE WOOD";
+    [FormerlySerializedAs("promptMessage")]
+    [SerializeField] private string aimAtWoodMessage = "KEEP AIMING AT THE WOOD TO SEAL THE HOLE";
+    [SerializeField] private string woodFinishedMessage = "WOOD IS SECURED";
+
+    [SerializeField] private GameController gameController;
 
     [SerializeField]
     private GameObject fixBoard;
@@ -26,6 +33,9 @@ public class Wall : HasDurability, IInteractable
     public bool IsDefending => boardPlaced && GetCurrentDurability() > 0;
     private void Start()
     {
+        if (gameController == null)
+            Debug.LogError("Wall needs a GameController assigned for interaction messages and wood placement.", this);
+
         if (attackCollider == null)
             Debug.LogWarning("Wall needs its attack collider assigned for enemy targeting.", this);
 
@@ -52,11 +62,11 @@ public class Wall : HasDurability, IInteractable
     }
     public void Interact()
     {
-        if (isBroken && !boardPlaced && GameController.Instance.isHoldingBoard)
+        if (isBroken && !boardPlaced && gameController != null && gameController.isHoldingBoard)
         {
             fixBoard.SetActive(true);
             boardPlaced = true;
-            GameController.Instance.isHoldingBoard = false;
+            gameController.isHoldingBoard = false;
             isHolding = true;
 
             AddCurrentDurability(Mathf.Max(1, amountPerClick));
@@ -70,7 +80,13 @@ public class Wall : HasDurability, IInteractable
 
     public string GetPromptMessage()
     {
-        return promptMessage;
+        if (boardPlaced)
+            return isBroken ? aimAtWoodMessage : woodFinishedMessage;
+
+        if (gameController == null)
+            return string.Empty;
+
+        return gameController.isHoldingBoard ? holdingWoodMessage : noWoodMessage;
     }
 
     protected override int DurabilityUpdateCheck()

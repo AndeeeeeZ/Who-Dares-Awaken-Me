@@ -29,6 +29,8 @@ public class MinimapDisplay : MonoBehaviour
     [Header("Marker appearance")]
     [SerializeField] private Image markerPrefab;
     [SerializeField] private Sprite tombstoneIcon;
+    [SerializeField] private Sprite brokenTombstoneIcon;
+    [SerializeField, Range(0f, 100f)] private float brokenTombstoneIconThresholdPercent = 50f;
     [SerializeField] private Sprite doorIcon;
     [SerializeField] private Sprite wallIcon;
     [SerializeField] private Sprite enemyIcon;
@@ -145,6 +147,12 @@ public class MinimapDisplay : MonoBehaviour
             float health = marker.Tombstone.MaxDurability > 0
                 ? (float)marker.Tombstone.GetCurrentDurability() / marker.Tombstone.MaxDurability
                 : 0f;
+            Sprite icon = brokenTombstoneIcon != null &&
+                          (marker.LastDurability <= 0 || health * 100f < brokenTombstoneIconThresholdPercent)
+                ? brokenTombstoneIcon
+                : tombstoneIcon;
+            if (icon != null && marker.Image.sprite != icon)
+                marker.Image.sprite = icon;
             Color color = marker.LastDurability > 0
                 ? Color.Lerp(damagedColor, healthyColor, health)
                 : brokenColor;

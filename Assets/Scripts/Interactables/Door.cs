@@ -1,9 +1,15 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Door : HasDurability, IInteractable
 {
-    [SerializeField]
-    private string promptMessage;
+    [Header("Interaction Messages")]
+    [FormerlySerializedAs("promptMessage")]
+    [SerializeField] private string noChainMessage = "GET CHAIN TO LOCK DOOR";
+    [SerializeField] private string holdingChainMessage = "CLICK TO ATTACH CHAIN";
+    [SerializeField] private string chainAttachedMessage = "CHAIN IS ATTACHED";
+
+    [SerializeField] private GameController gameController;
 
     [SerializeField]
     private GameObject fixChain;
@@ -24,6 +30,9 @@ public class Door : HasDurability, IInteractable
 
     private void Start()
     {
+        if (gameController == null)
+            Debug.LogError("Door needs a GameController assigned for interaction messages and chain placement.", this);
+
         locked = !isOpen;
         currentDurability = locked ? maxDurability : 0;
         base.OnStart();
@@ -41,9 +50,9 @@ public class Door : HasDurability, IInteractable
     {
         if (!locked)
         {
-            if (GameController.Instance.isHoldingBar)
+            if (gameController != null && gameController.isHoldingBar)
             {
-                GameController.Instance.isHoldingBar = false; 
+                gameController.isHoldingBar = false;
                 open.SetActive(false);
                 close.SetActive(true); 
                 fixChain.SetActive(true);
@@ -56,9 +65,13 @@ public class Door : HasDurability, IInteractable
 
     public string GetPromptMessage()
     {
-        if (!locked)
-            return promptMessage;
-        return ""; 
+        if (locked)
+            return chainAttachedMessage;
+
+        if (gameController == null)
+            return string.Empty;
+
+        return gameController.isHoldingBar ? holdingChainMessage : noChainMessage;
     }
 
     protected override int DurabilityUpdateCheck()
